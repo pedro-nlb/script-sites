@@ -11,6 +11,11 @@
 \usepackage{tikz-cd}
 \usetikzlibrary{decorations.markings}
 \usepackage{float}
+\usepackage[backend=biber, style=alphabetic]{biblatex}
+\setcounter{biburlnumpenalty}{7000}
+\setcounter{biburllcpenalty}{7000}
+\setcounter{biburlucpenalty}{8000}
+\addbibresource{main.bib}
 \usepackage{hyperref}
 \urlstyle{same}
 \usepackage[noabbrev]{cleveref}
@@ -36,7 +41,7 @@
 \Crefname{xca}{Exercise}{Exercises}
 \Crefname{rem}{Remark}{Remarks}
 
-\title[Talk on...]{Talk on...}
+\title[Talk on Sites and Topologies]{Talk on Sites and Topologies}
 \author[Pedro N\'{u}\~{n}ez]{Pedro N\'{u}\~{n}ez}
 \address{Pedro N\'{u}\~{n}ez \newline
 \indent Albert-Ludwigs-Universit\"{a}t Freiburg, Mathematisches Institut \newline
@@ -64,17 +69,48 @@
 \maketitle
 
 \begin{abstract}
-  Script for a talk on...
+  Notes for a talk on Sites and Topologies as part of the seminar on Topos theory and Logic organized by Luca Terenzi at the University of Freiburg during the Winter Term 2021/2022.
 \end{abstract}
 
 \tableofcontents
 
-\begin{center}
-  \textcolor{gray}{---parts in gray will be omitted during the talk---}
-\end{center}
+%\begin{center}
+%  \textcolor{gray}{---parts in gray will be omitted during the talk---}
+%\end{center}
 
-\bibliographystyle{alpha}
-\bibliography{main}
+The main reference for this talk is \cite{sga4}.
+
+\section{Recollections from previous talks}
+
+\begin{itemize}
+  \item Recall the notion of presite and pretopology from previous talk, and the example that different pretopologies on the same categories may have the same associated category of sheaves.
+  \item Using the Yoneda Lemma, explain how to every covering family of an object in a presite can be attached a sub-functor of the corresponding representable functor, and introduce the notion of \textit{sieve} on an object in a category.
+\end{itemize}
+
+\section{Grothendieck topologies}
+
+\begin{itemize}
+  \item Define the notion of a \textit{Grothendieck topology} on a category and of \textit{site}.
+\end{itemize}
+
+\section{Examples}
+
+\begin{itemize}
+  \item Give examples including the \textit{chaotic} topology, the \textit{discrete} topology, and the topology \textit{associated} to a given pretopology.
+\end{itemize}
+
+\section{Topologies and sheaves}
+
+\begin{itemize}
+  \item Define the topology \textit{generated} by a family of sieves.
+    Dually, define the \textit{finest} topology for which all presheaves in a given family are separated/sheaves.
+  \item Show that this defines an order-reversing correspondence between Grothendieck topologies and categories of sheaves.
+    Deduce that a pretopology and the associated topology define the same category of sheaves.
+  \item Introduce the notion of \textit{canonical} and \textit{sub-canonical} topology.
+    Explain how to characterize them via the Yoneda embedding.
+\end{itemize}
+
+\printbibliography
 \vfill
 
 \end{document}
