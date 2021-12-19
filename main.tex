@@ -1,12 +1,14 @@
 \documentclass[12pt,a4paper]{amsart}
 
+\usepackage{libertine}
+\usepackage[libertine]{newtxmath}
+
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[british]{babel}
 \usepackage{mathtools}
 \usepackage{amsthm}
-\usepackage{amssymb}
-\usepackage{mathrsfs}
+\usepackage[mathscr]{euscript}
 \usepackage{enumitem}
 \usepackage{tikz-cd}
 \usetikzlibrary{decorations.markings}
@@ -32,6 +34,7 @@
 \newtheorem{xca}[thm]{Exercise}
 \theoremstyle{remark}
 \newtheorem{rem}[thm]{Remark}
+\newtheorem*{cav}{Caveat}
 \Crefname{thm}{Theorem}{Theorems}
 \Crefname{lm}{Lemma}{Lemmas}
 \Crefname{prop}{Proposition}{Propositions}
@@ -79,24 +82,466 @@
 %\end{center}
 
 The main references for this talk are \cite{sga4} and \cite{stacks-project}.
-When in doubt, e.g.~about notation and conventions, we will try to follow the more modern reference \cite{stacks-project} instead of \cite{sga4}.
+
+\setcounter{section}{-1}
+
+\section{Notation and conventions}
+
+We use the font $\mathbf{C}$, $\mathbf{D}$, ...~for categories and the font $\mathscr{F}$, $\mathscr{G}$, ...~for presheaves.
+We will use the font $F$, $G$, ...~for functors which are not presheaves or which we are not interested in regarding as such.
+We will use greek letters for natural transformations.
+We will ignore most of the set theoretic issues.
+
+We will sometimes depict categories as follows:~objects are bullet points, morphisms are arrows and identities are not depicted at all.
+So for example
+\begin{center}
+  \begin{tikzcd}
+    & \bullet \arrow{d} \\
+    \bullet \arrow{r} & \bullet
+  \end{tikzcd}
+\end{center}
+represents a category with three objects, three identity morphisms and two morphisms from two of the objects to the third object.
+This determines the category up to isomorphism of categories, so we will sometimes talk about \textit{the} category represented by such a picture.
+
+\begin{cav}
+  Such a picture does not need to be a commutative diagram.
+  More generally, a diagram will only be assumed to be commutative if we explicitly say so.
+\end{cav}
+
+Here is a list with some categories that we might use:
+\begin{itemize}
+  \item The category $\mathbf{Set}$ of sets.
+  \item The category $\mathbf{Set}_{*}$ of pointed sets.
+  \item The category $\mathbf{Cat}$ of categories and functors.
+  \item The category $\mathbf{Grp}$ of groups.
+  \item The category $\mathbf{Ab}$ of abelian groups.
+  \item The category $\mathbf{Ring}$ of commutative rings with one and ring homomorphisms sending one to one.
+  \item If $R$ is a commutative ring with one, then we consider the categories $R$-$\mathbf{Mod}$ and $R$-$\mathbf{mod}$ of $R$-modules and finitely generated $R$-modules respectively.
+  \item The category $\mathbf{Top}$ of topological spaces.
+  \item The category $\mathbf{Top}_{*}$ of pointed topological spaces.
+  \item The category $\mathbf{Sch}$ of schemes and its full subcategory $\mathbf{Aff}$ of affine schemes.
+  \item If $\mathbf{C}$ is a category and $X$ is an object in $\mathbf{C}$, then $\mathbf{C}_{X}$ is the category of objects in $\mathbf{C}$ over $X$, whose objects are morhpisms $Y \to X$ in $\mathbf{C}$ and whose morphisms are morphisms $Y \to Y'$ in $\mathbf{C}$ making the corresponding triangle commute.
+  \item If $\mathbf{C}$ and $\mathbf{D}$ are two categories, then $\mathbf{Fun}(\mathbf{C},\mathbf{D})$ is the category of functors between them, with morphisms given by natural transformations.
+  \item If $\mathbf{C}$ is a category, then $\mathbf{C}^{\mathrm{op}}$ denotes its opposite category.
+  \item If $\mathbf{C}$ is a category, then $\mathbf{PSh}(\mathbf{C}):= \mathbf{Fun}(\mathbf{C}^{\mathrm{op}},\mathbf{Set})$ is the category of presheaves on $\mathbf{C}$.
+  \item If $X$ is a topological space, then $\mathbf{Op}(X)$ denotes the category corresponding to the partially ordered set of open subsets of $X$ and $\mathbf{PSh}(X) := \mathbf{PSh}(\mathbf{Op}(X))$ denotes the corresponding category of presheaves.
+\end{itemize}
 
 \section{Recollections from previous talks}
 
+{\color[rgb]{0.2,0.2,0.6}
 \begin{itemize}
+  \item Recall limits and fibered products.
   \item Recall the notion of presite and pretopology from previous talk, and the example that different pretopologies on the same categories may have the same associated category of sheaves.
   \item Using the Yoneda Lemma, explain how to every covering family of an object in a presite can be attached a sub-functor of the corresponding representable functor, and introduce the notion of \textit{sieve} on an object in a category.
 \end{itemize}
+}
+
+\subsection{Limits}
+
+The limit construction takes as input a bunch of objects and morphisms between them in some category $\mathbf{C}$ and gives as an output a new object together with compatible morphisms to each of the previous objects having a nice universal property, which we can think of as this object being the largest possible object with such properties.
+We need to make a few things precise here:
+
+\begin{itemize}
+  \item Let us start by making the sentence ``a bunch of objects and morphisms between them in some category $\mathbf{C}$'' precise.
+    We want to consider something like
+    \begin{center}
+      \begin{tikzcd}
+        & B \arrow{d} \\
+        C \arrow{r} & A
+      \end{tikzcd}
+    \end{center}
+    or maybe something without any morphisms like
+    \begin{center}
+      \begin{tikzcd}
+        A & B
+      \end{tikzcd}
+    \end{center}
+    or maybe even something without anything at all.
+    We can make this notion precise using set theoretic language, e.g., a set of objects in $\mathbf{C}$ and a set of objects and a set of morphisms between them.
+    But we want to make this notion precise using categorical language instead.
+    A neat way to do this is by considering such a bunch of objects and morphisms in $\mathbf{C}$ as the image of a functor from some other category.
+    This leads to the notion of a \textit{diagram} in $\mathbf{C}$, which is simply a functor $F \colon \mathbf{I} \to \mathbf{C}$.
+    The previous three examples would correspond to taking $\mathbf{I}$ as the category
+    \begin{center}
+      \begin{tikzcd}
+        & \bullet \arrow{d} \\
+        \bullet \arrow{r} & \bullet
+      \end{tikzcd}
+    \end{center}
+    or the category $(\bullet \quad \bullet)$ or the empty category respectively.
+
+    So the input of the limit construction is a diagram, i.e., a functor.
+  \item Let us discuss the sentence ``a new object together with compatible morphisms to each of the previous objects'' now.
+    Given a diagram $F \colon \mathbf{I} \to \mathbf{C}$ in $\mathbf{C}$, we want its limit to be an object in $\mathbf{C}$ together with morphisms to  each object in the diagram making this new diagram commute when starting from this object.
+    Again, we could make this precise using set theory, but it is more natural to continue using categorical language instead.
+    A way to phrase this in categorical terms is using the notion of a \textit{cone} over the diagram $F$.
+    We first define the auxiliary category $C(\mathbf{I})$ as the category obtained from adding a new object to $\mathbf{I}$ (together with the corresponding identity morphism) and adding a single morphism from this new object to every object in the old category $\mathbf{I}$.
+    We can compose these new morphisms with the old ones, but since we have only added a single morphism from the new object to each old object, every composition starting from the new object and finishing in some other object has to agree and be equal to the single morphism that we added.
+    A \textit{cone} over $F$ is then a diagram $C \colon C(\mathbf{I}) \to \mathbf{C}$ that restricts to $F$ over the full subcategory $\mathbf{I} \subseteq C(\mathbf{I})$.
+    Explicitly, such a cone consists of a new diagram obtained from the old one by adding a new object $V$ and a new morphism from $V$ to every object in the old diagram in such a way that this new diagram commutes when starting from $V$.
+    We can picture this by putting the old diagram in a horizontal plane (this would be the base of the cone) and placing $V$ above it (this would be the vertex of the cone):
+    \begin{center}
+      \begin{tikzcd}
+        & &[-10mm] V \arrow{dl} \arrow[bend right=30]{ddll} \arrow{ddr} \arrow[bend left=20]{drr} & &[-10mm] \\
+        & A \arrow{dl} \arrow{rrr} & & & B \\
+        C \arrow[shift left=1, bend left=5]{rrr} \arrow[shift right=1, bend right=5]{rrr} & & & D &
+      \end{tikzcd}
+    \end{center}
+    We stress again that this diagram is only supposed to commute when starting from $V$; for example, the two arrows $C \to D$ need not be equal.
+    
+    So the output of the limit construction is a cone over the input diagram, i.e., a new diagram which we can picture as a cone having the old diagram as a base.
+  \item Finally, let us make the sentence ``the largest possible object with such properties'' precise.
+    This is arguably the most imprecise sentence in our initial description and yet the most important part of the concept of limit, so it would be a good time to say last but not least.
+    Cones over $F$ form a category, namely, the subcategory of the category of functors $\mathbf{Fun}(C(\mathbf{I}),\mathbf{C})$ whose objects are functors that restrict to $F$ over $\mathbf{I} \subseteq C(\mathbf{I})$ and whose morphisms are the natural transformations that restrict to the identity on $F$, meaning that the component at each object of $\mathbf{I} \subseteq C(\mathbf{I})$ is the identity on the image of the corresponding object under $F$.
+    We can picture this by drawing the common base of the two cones as a single base, as shown in the following picture:
+    \begin{center}
+      \begin{tikzcd}
+        V \arrow[bend left=10]{rrrrrr} \arrow{ddr} \arrow{drr} \arrow[bend right=15]{ddrrrr} \arrow{drrrrr} & & &[-10mm] & &[-10mm] & V' \arrow{llllldd} \arrow{lllld} \arrow{dl} \arrow[bend left=30]{ddll} \\
+         & & A \arrow[shift right=1, bend right=20]{dl} \arrow[shift right=2, bend right=15]{rrr} & & & B & \\
+         & C \arrow[shift right=1, bend right=20]{rrr} \arrow[shift right=3, bend right=30]{rrr} & & & D & &
+      \end{tikzcd}
+    \end{center}
+    Again, this diagram is only supposed to commute starting from $V$ and starting from $V'$.
+    
+    So we have a category $\mathbf{Cones}(F)$ of cones over our diagram $F$.
+    The limit of $F$, if it exists, is precisely a terminal cone, i.e., a terminal object in the category $\mathbf{Cones}(F)$.
+    The reason to have used the word ``largest'' in our informal description is two-fold.
+    On the one hand, we can think of a partially ordered set as a category having the same set of objects, in which there is a morphism $x \to y$ if and only if $x \leq y$.
+    If this poset has a largest element, then this element is a terminal object in the corresponding category.
+    More generally, the categorical product (which is a particular case of limit) of a subset of this poset, if it exists, corresponds to the infimum of this subset, which is the largest lower bound of all the elements in the subset.
+    On the other hand, one can intuitively think of limits as subobjects and colimits as quotient object, because this is indeed a possible way to construct limits and colimits in many familiar categories, e.g., in the category of sets, in which the limit can be constructed as a suitable subset of the product of all sets in the diagram.
+\end{itemize}
+
+\begin{rem}
+  Let $\mathbf{C}$ be a category in which all limits exist, meaning that for all $\mathbf{I}$ and all $F \colon \mathbf{I} \to \mathbf{C}$ the limit $\lim(F)$ exists.
+  Then, for every category $\mathbf{I}$, we have a functor
+  \[ \lim_{\mathbf{I}} \colon \mathbf{Fun}(\mathbf{I}, \mathbf{C}) \to \mathbf{C}. \]
+  This functor is right adjoint to the functor
+  \[ \operatorname{const}_{(-)} \colon \mathbf{C} \to \mathbf{Fun}(\mathbf{I}, \mathbf{C}) \]
+  sending an object $X$ in $\mathbf{C}$ to the functor sending every object in $\mathbf{I}$ to $X$ and every morphism in $\mathbf{I}$ to the identity on $X$.
+  In particular, the functor $\operatorname{lim}_{\mathbf{I}}$ preserves limits.
+\end{rem}
+
+\begin{exmp}[Terminal objects]
+  Let $\mathbf{C}$ a category and let $\mathbf{I} = \varnothing$ be the empty category and $\varnothing \colon \varnothing \to \mathbf{C}$ the empty functor.
+  Then $\lim(\varnothing)$ is a terminal object in $\mathbf{C}$.
+  Examples of terminal objects include:
+  \begin{enumerate}
+    \item A singleton $\{ * \}$ in the categories $\mathbf{Set}$, $\mathbf{Set}_{*}$, $\mathbf{Cat}$, $\mathbf{Top}$, $\mathbf{Top}_{*}$, $\mathbf{Grp}$, $\mathbf{Ab}$, $\mathbf{Ring}$, $R$-$\mathbf{Mod}$, $R$-$\mathbf{mod}$, ... (with the corresponding structure on $\{ * \}$ omitted in each case).
+    \item $\operatorname{Spec}(\mathbb{Z})$ in $\mathbf{Sch}$ and in $\mathbf{Aff}$.
+    \item $X$ in $\mathbf{C}_{X}$.
+    \item $X$ in $\mathbf{Op}(X)$.
+    \item $\varnothing$ in $\mathbf{Set}^{\mathrm{op}}$.
+    \item The constant presheaf with value $\{ * \}$ in $\mathbf{PSh}(\mathbf{C})$.
+  \end{enumerate}
+  Some categories in which terminal objects to do not exist include:
+  \begin{enumerate}
+    \item The subcategory of $\mathbf{Set}$ consisting of infinite sets.
+    \item The category $\mathbf{Aff}_{S}$ of affine schemes over a non-affine scheme $S$.
+    \item Any set with more than one element regarded as a category with only the identities as morphisms.
+    \item The partially ordered set of finite subsets of an infinite set.
+    \item The totally ordered set $(\mathbb{R},\leq)$.
+  \end{enumerate}
+\end{exmp}
+
+\begin{exmp}[Binary products]
+  Let $\mathbf{C}$ be a category and let $\mathbf{I}$ be the category $(\bullet \quad \bullet)$.
+  We consider a diagram $F \colon \mathbf{I} \to \mathbf{C}$, which then consists of two objects $A$ and $B$ in $\mathbf{C}$ without any morphisms between them.
+  Then $\lim(F)$ is a product $A \times B$ in $\mathbf{C}$, that is, an ojbect $A \times B$ in $\mathbf{C}$ with morphisms $A \times B \to A$ and $A \times B \to B$ such that for every other object $T$ in $\mathbf{C}$ admitting morphisms to $A$ and to $B$ in $\mathbf{C}$ there exists a unique morphism $T \to A \times B$ making the corresponding diagram commute.
+  In a picture:
+  \begin{center}
+    \begin{tikzcd}
+      & T \arrow[dashed]{d}{\exists !} \arrow[bend right=30]{ddl} \arrow[bend left=30]{ddr} & \\
+      & A \times B \arrow{dl} \arrow{dr} & \\
+      A & & B
+    \end{tikzcd}
+  \end{center}
+  Examples of binary products include:
+  \begin{enumerate}
+    \item The cartesian product $A \times B$ (with the corresponding projections) in $\mathbf{Set}$, $\mathbf{Set}_{*}$, $\mathbf{Cat}$, $\mathbf{Top}$, $\mathbf{Top}_{*}$, $\mathbf{Grp}$, $\mathbf{Ab}$, $\mathbf{Ring}$, $R$-$\mathbf{Mod}$, $R$-$\mathbf{mod}$, ... (again omitting the induced structure on $A \times B$ in each case).
+    \item The intersection $A \cap B$ in $\mathbf{Op}(X)$.
+    \item The infimum $\operatorname{inf}\{ A, B\}$ in a partially ordered set (if it exists).
+    \item The disjoint union $A \sqcup B$ in $\mathbf{Set}^{\mathrm{op}}$.
+    \item The point-wise product
+      \[ U \mapsto \mathscr{F}(U) \times \mathscr{G}(U) \]
+      in $\mathbf{PSh}(\mathbf{C})$.
+    \item The tensor product $A \otimes B$ (over $\mathbb{Z}$) in $\mathbf{Ring}^{\mathrm{op}}$.
+    \item The spectrum of the tensor product of coordinate rings in $\mathbf{Aff}$, i.e.,
+      \[ \operatorname{Spec}(A) \times \operatorname{Spec}(B) = \operatorname{Spec}(A \otimes B). \]
+    \item The scheme $X \times Y$ obtained from $X$ and $Y$ by gluing the product of affine open subschemes.
+  \end{enumerate}
+  Some categories in which binary products do not always exist include:
+  \begin{enumerate}
+    \item The binary product of two sets with $5$ elements in the category of sets with at most $5$ elements does not exist.
+    \item Any set with more than one element regarded as a category with only the identities as morhpisms does not have any binary products except the product of each object with itself.
+  \end{enumerate}
+\end{exmp}
+
+\begin{exmp}[Products]
+  Let $\mathbf{C}$ be a category and let $I$ now be a set regarded as a category with only the identities as morphisms.
+  The limit of a diagram $F \colon I \to \mathbf{C}$ is then a product indexed by $I$; this time we don't spell out the universal property and jump straight to the examples.
+  Examples of products include:
+  \begin{enumerate}
+    \item The cartesian product $\prod_{i \in I} A_{i}$ in $\mathbf{Set}$, $\mathbf{Set}_{*}$, $\mathbf{Cat}$, $\mathbf{Top}$, $\mathbf{Top}_{*}$, $\mathbf{Grp}$, $\mathbf{Ab}$, $\mathbf{Ring}$, $R$-$\mathbf{Mod}$, ... (again, we don't make precise the induced structure in each case).
+    \item The point-wise product
+      \[ U \mapsto \prod_{i \in I} \mathscr{F}_{i}(U) \]
+      in $\mathbf{PSh}(\mathbf{C})$.
+    \item The infimum $\operatorname{inf}_{i \in I} \{ a_{i} \}$ of a bounded-below collection of numbers in $(\mathbb{R}, \leq)$.
+  \end{enumerate}
+  Some examples of situations in which products do not exist include:
+  \begin{enumerate}
+    \item The product of infinitely many sets each containing more than one element does not exist in the category of finite sets.
+    \item The product of infinitely many positive dimensional $k$-vector spaces does not exist in $k$-$\mathbf{mod}$.
+    \item The product of the diagram $\mathbb{N} \to \mathbf{Op}(\mathbb{R}), n \mapsto (-1/n,1/n)$ does not exist in $\mathbf{Op}(\mathbb{R})$.
+    \item Let $(a_{n})_{n \in \mathbb{N}}$ be a decreasing sequence of rational numbers converging to $\pi \in \mathbb{R}$.
+      Then the product $\operatorname{inf}_{n \in \mathbb{N}} \{ a_{n} \}$ does not exist in $(\mathbb{Q}, \leq)$.
+  \end{enumerate}
+\end{exmp}
+
+\begin{exmp}[Equalizers]
+  Let $\mathbf{C}$ be a category and let $\mathbf{I}$ be the category $(\bullet \rightrightarrows \bullet)$.
+  A diagram $F \colon \mathbf{I} \to \mathbf{C}$ corresponds to the data of two parallel morphisms $f \colon A \to B$ and $g \colon A \to B$, and its limit is called the equalizer of $f$ and $g$, denoted $\operatorname{Eq}(f,g)$.
+  The universal property of the equalizer can be pictured as follows:
+  \begin{center}
+    \begin{tikzcd}
+      & T \arrow[swap, dashed, bend right=30]{dl}{\exists !} \arrow{d} \arrow[bend left=30]{dr} & & \\
+      \operatorname{Eq}(f,g) \arrow{r} & A \arrow[shift left=1]{r}{f} \arrow[swap, shift right=1]{r}{g} & B
+    \end{tikzcd}
+  \end{center}
+  Examples of equalizers include:
+  \begin{enumerate}
+    \item The subset $\{ a \in A \mid f(a) = g(b) \}$ (with the corresponding inclusion) in $\mathbf{Set}$, $\mathbf{Set}_{*}$, $\mathbf{Cat}$, $\mathbf{Top}$, $\mathbf{Top}_{*}$, $\mathbf{Grp}$, $\mathbf{Ab}$, $\mathbf{Ring}$, $R$-$\mathbf{Mod}$, $R$-$\mathbf{mod}$, ... (as usual we don't make precise the induced structure in each case).
+    \item We have $\operatorname{Eq}(0,f) = \operatorname{Ker}(f)$ in $\mathbf{Grp}$, $\mathbf{Ab}$, $R$-$\mathbf{Mod}$ and $R$-$\mathbf{mod}$.
+    \item The point-wise equalizer
+      \[ U \mapsto \{ s \in \mathscr{F}(U) \mid f_{U}(s) = g_{U}(s) \} \]
+      in $\mathbf{PSh}(\mathbf{C})$.
+  \end{enumerate}
+  Some examples in which equalizers do not exist include:
+  \begin{enumerate} 
+    \item The equalizer of $(\bullet \rightrightarrows \bullet)$ does not exist in $\mathbf{I}$ itself.
+    \item The equalizer of two morphisms $f, g \colon X \to Y$ which agree only on a finite subset of $X$ does not exist in the category of infinite sets.
+  \end{enumerate}
+\end{exmp}
+
+\begin{xca}
+  Let $\mathbf{C}$ be a category and let $f, g \colon A \rightrightarrows B$ be parallel arrows in $\mathbf{C}$ such that $\operatorname{Eq}(f,g)$ exists in $\mathbf{C}$.
+  Show that the morphism $\operatorname{Eq}(f,g) \to A$ is a monomorhpism in $\mathbf{C}$.
+\end{xca}
+
+\subsection{Fibered products}
+
+These are particular cases of limits, but they will be so relevant later on that they deserve their own subsection.
+We take $\mathbf{I}$ to be the category
+\begin{center}
+  \begin{tikzcd}
+    & \bullet \arrow{d} \\
+    \bullet \arrow{r} & \bullet
+  \end{tikzcd}
+\end{center}
+
+The limit of a diagram $F \colon \mathbf{I} \to \mathbf{C}$ is called a \textit{fibered product} in $\mathbf{C}$.
+Before looking at particular examples, let us introduce some notation and terminology around fibered products.
+Consider two morphisms $f \colon B \to A$ and $g \colon C \to A$ in $\mathbf{C}$.
+Their fibered product is denoted by $B \times_{A} C$.
+If we need to be precise about the morphisms $f$ and $g$, we can also use the notation $B \times_{f,A,g} C$.
+By definition of the limit, the fibered product $B \times_{A} C$ comes with two projections $p_{1} \colon B \times_{A} C \to B$ and $p_{2} \colon B \times_{A} C \to C$ which fit into a commutative diagram as follows:
+\begin{center}
+  \begin{tikzcd}
+    B \times_{A} C \arrow[swap]{d}{p_{1}} \arrow{r}{p_{2}} & C \arrow{d}{g} \\
+    B \arrow[swap]{r}{f} & A
+  \end{tikzcd}
+\end{center}
+Such a diagram is sometimes called a \textit{cartesian square}, and it satisfies a universal property which can be pictured as follows:
+\begin{center}
+  \begin{tikzcd}
+    T \arrow[bend left=30]{drr} \arrow[bend right=30]{ddr} \arrow[dashed]{dr}{\exists !} & & \\
+    & B \times_{A} C \arrow[swap]{d}{p_{1}} \arrow{r}{p_{2}} & C \arrow{d}{g} \\
+    & B \arrow[swap]{r}{f} & A
+  \end{tikzcd}
+\end{center}
+Spelled out, this means that if the outer (deformed) square commutes, then there exists a unique arrow (the dashed arrow) making the whole diagram commute.
+
+\begin{rem}\label{rem:cartesian}
+  If we say that the diagram
+  \begin{center}
+    \begin{tikzcd}
+      D \arrow[swap]{d}{q_{1}} \arrow{r}{q_{2}} & C \arrow{d}{g} \\
+      B \arrow[swap]{r}{f} & A
+    \end{tikzcd}
+  \end{center}
+  is cartesian, we mean that it commutes and it has the previously discussed universal property, which in turn implies that there exists an isomorhpism $h\colon D \to B \times_{A} C$ such that $q_{1} = p_{1} \circ h$ and $q_{2} = p_{2} \circ h$.
+  Limits are only unique up to isomorphism anyway, so we are running around a bit in circles here; but in practice we usually have an explicit construction of $B \times_{A} C$ in mind, and such a $D$ may not be explicitly given like that.
+\end{rem}
+
+Cartesian diagrams are sometimes marked as
+\begin{center}
+  \begin{tikzcd}
+    D \arrow[phantom, "\square"]{dr} \arrow[swap]{d}{q_{1}} \arrow{r}{q_{2}} & C \arrow{d}{g} \\
+    B \arrow[swap]{r}{f} & A
+  \end{tikzcd}
+\end{center}
+or sometimes also as
+\begin{center}
+  \begin{tikzcd}
+    D \arrow[phantom, "\lrcorner"]{dr} \arrow[swap]{d}{q_{1}} \arrow{r}{q_{2}} & C \arrow{d}{g} \\
+    B \arrow[swap]{r}{f} & A
+  \end{tikzcd}
+\end{center}
+A mnemonic to remember the orientation of the symbol in the middle is that the two sides of the right angle are pointing to the two morphisms which were given by the universal property of the limit.
+This notation avoids confusion with the dual notion of a \textit{pushout square}, in which the two arrows created by the universal property of the colimit would be the ones pointing towards the bottom right object.
+
+\begin{xca}[Pasting lemma]
+  Let $\mathbf{C}$ be a category.
+  Consider a commutative diagram as follows:
+  \begin{center}
+    \begin{tikzcd}
+      A \arrow{d} \arrow{r} & B \arrow[phantom, "\lrcorner"]{dr} \arrow{d} \arrow{r} & C \arrow{d} \\
+      D \arrow{r} & E \arrow{r} & F
+    \end{tikzcd}
+  \end{center}
+  Then the left square is cartesian if and only if the outer rectangle is cartesian.
+  As a corollary we have the formula
+  \[ (X \times_{Y} Z) \times_{Z} W \cong X \times_{Y} W. \]
+  The similarity with the formula
+  \[ (R \otimes_{S} S') \otimes_{S'} T \cong R \otimes_{S} T \]
+  is no coincidence, as hinted at by one of the previous examples (using the equivalence between $\mathbf{Aff}^{\mathrm{op}}$ and $\mathbf{Ring}$).
+\end{xca}
+
+Moving on to some more terminology.
+There are many situations in which we are working over a given object as our base.
+For example, vector bundles over a topological space, schemes over another scheme, covering spaces over a topological space...
+If we are working over an object $A$ in $\mathbf{C}$ and we have a morphism $f \colon B \to A$ in $\mathbf{C}$, we are sometimes interested in using this morphism as a \textit{base change} morphism and start working over $B$ instead.
+In this situation we can say that $q_{1} \colon D \to B$ is the \textit{pull back} of $g \colon C \to A$ under $f$.
+
+Let $\mathbf{P}$ be a property of morphisms in a category $\mathbf{C}$.
+We say that the property $\mathbf{P}$ is \textit{stable under pull back} if the following holds:~for all cartesian squares
+\begin{center}
+  \begin{tikzcd}
+    D \arrow[phantom, "\lrcorner"]{dr} \arrow[swap]{d}{q_{1}} \arrow{r}{q_{2}} & C \arrow{d}{g} \\
+    B \arrow[swap]{r}{f} & A
+  \end{tikzcd}
+\end{center}
+in $\mathbf{C}$, $g$ has $\mathbf{P}$ implies that $q_{1}$ has $\mathbf{P}$.
+In the last talk, Tanuj sketched the proof that ``being an isomorphism'' is stable under pull back.
+The same is true for monomorphisms, but not necessarily true for epimorphisms.
+
+\begin{rem}
+  A comprehensive list of properties of morphisms which are stable under pull back in algebraic geometry can be found in \cite[Appendix C]{gw10}.
+\end{rem}
+
+Let us finally come to particular examples of fibered products.
+We want to abstract the theory of sheaves on topological spaces into a theory of sheaves on categories, so let us focus on the category $\mathbf{Top}$ for the remaining of this subsection.
+
+Let $f \colon Y \to X$ and $g \colon Z \to X$ be two continuous maps between topological spaces.
+Then their fibered product can be constructed as
+\[ Y \times_{X} Z = \{ (y,z) \in Y \times Z \mid f(y) = g(z) \}. \]
+This set is endowed with the subspace topology and the projections $p_{1} \colon Y \times_{X} Z \to Y$ and $p_{2} \colon Y \times_{X} Z \to Z$ are the restrictions of the projections from the cartesian product.
+
+\begin{exmp}\label{exmp:preimage}
+  Let $X$ be a topological space and let $i \colon U \to X$ be the inclusion of an open subset.
+  Let $f \colon Y \to X$ be a continuous map.
+  Then:
+  \begin{center}
+    \begin{tikzcd}
+      f^{-1}(U) \arrow[phantom, "\lrcorner"]{dr} \arrow[hookrightarrow]{r} \arrow[swap]{d}{f|_{f^{-1}(U)}} & Y \arrow{d}{f} \\
+      U \arrow[hookrightarrow]{r} & X
+    \end{tikzcd}
+  \end{center}
+  Note that $f^{-1}(U)$ is not equal to the fibered product as described above, cf.~\Cref{rem:cartesian}.
+\end{exmp}
+
+A particular example of the previous example is the following:
+
+\begin{exmp}
+  Let $X$ be a topological space and let $i \colon U \to X$ and $j \colon V \to X$ be inclusions of two open subsets.
+  Then:
+  \begin{center}
+    \begin{tikzcd}
+      U \cap V \arrow[phantom, "\lrcorner"]{dr} \arrow[hookrightarrow]{r} \arrow[hookrightarrow]{d} & V \arrow[hookrightarrow]{d} \\
+      U \arrow[hookrightarrow]{r} & X
+    \end{tikzcd}
+  \end{center}
+  Again, cf.~\Cref{rem:cartesian}.
+\end{exmp}
+
+\begin{exmp}\label{exmp:fiber}
+  Let $X$ be a topological space and let $i \colon \{ * \} \to X$ be a map, which corresponds to picking a point $i(*) \in X$.
+  Let $f \colon Y \to X$ be a continuous map.
+  Then:
+  \begin{center}
+    \begin{tikzcd}
+      f^{-1}(i(*)) \arrow[phantom, "\lrcorner"]{dr} \arrow{r} \arrow[hookrightarrow]{d} & \{ * \} \arrow{d}{i} \\
+      Y \arrow[swap]{r}{f} & X
+    \end{tikzcd}
+  \end{center}
+\end{exmp}
+
+\begin{exmp}
+  Let $X$ be a topological space and let $p \colon E \to X$ be a vector bundle on $X$.
+  Let $f \colon Y \to X$ be a continuous map.
+  Then we define the pull back $f^{*}E \to Y$ of $E$ along $f$ as
+  \begin{center}
+    \begin{tikzcd}
+      f^{*}E \arrow[phantom, "\lrcorner"]{dr} \arrow{d} \arrow{r} & E \arrow{d}{p} \\
+      Y \arrow[swap]{r}{f} & X
+    \end{tikzcd}
+  \end{center}
+  The morphism $f^{*}E \to Y$ is a vector bundle on $Y$ and the fiber of $f^{*}E \to Y$ over a point $y \in Y$ is isomorphic (I really want to say ``the same'' here) as the fiber of $E \to X$ over $f(y)$.
+\end{exmp}
+
+\begin{exmp}
+  Let $X$ be a connected topological space and let $p \colon \tilde{X} \to X$ be a covering space.
+  Let's say it is a 7-sheeted covering space, i.e., each fiber has exactly 7 points.
+  Then $p^{*}\tilde{X} \to \tilde{X}$ is again a 7-sheeted covering of $\tilde{X}$, so the composition $p^{*}\tilde{X} \to X$ is a 49-sheeted covering of $X$.
+\end{exmp}
+
+Related to the previous two examples, we also have:
+
+\begin{xca}
+  The homotopy lifting property is stable under pull back in $\mathbf{Top}$, i.e., the pull back of a Hurewicz fibration is again a Hurewicz fibration.
+\end{xca}
+
+To close this subsection, let us mention a couple more facts that we may or may not need to use later on:
+
+\begin{exmp}
+  Let $\mathbf{C}$ be a category with a terminal object $T$ and let $A$ and $B$ be objects in $\mathbf{C}$.
+  Then:
+  \begin{center}
+    \begin{tikzcd}
+      A \times B \arrow[phantom, "\lrcorner"]{dr} \arrow{r} \arrow{d} & B \arrow{d} \\
+      A \arrow{r} & T
+    \end{tikzcd}
+  \end{center}
+  This applies for instance to $\mathbf{C} = \mathbf{Top}$ with $T = \{ * \}$.
+\end{exmp}
+
+\begin{xca}
+  Construct the fibered product of a diagram
+  \begin{center}
+    \begin{tikzcd}
+      & C \arrow{d} \\
+      B \arrow{r} & A
+    \end{tikzcd}
+  \end{center}
+  of sets using only products and equalizers.
+  (There is nothing special about the category of sets nor about the fibered product; we've already seen in previous talks that this can be done for every kind of limit in any category.
+  But the computations are simpler in this case.)
+\end{xca}
+
 
 \section{Grothendieck topologies}
 
+{\color[rgb]{0.2,0.2,0.6}
 \begin{itemize}
   \item Define the notion of a \textit{Grothendieck topology} on a category and of \textit{site}.
   \item Give examples including the \textit{chaotic} topology, the \textit{discrete} topology, and the topology \textit{associated} to a given pretopology.
 \end{itemize}
+}
 
 \section{Topologies and sheaves}
 
+{\color[rgb]{0.2,0.2,0.6}
 \begin{itemize}
   \item Define the topology \textit{generated} by a family of sieves.
     Dually, define the \textit{finest} topology for which all presheaves in a given family are separated/sheaves.
@@ -105,6 +550,7 @@ When in doubt, e.g.~about notation and conventions, we will try to follow the mo
   \item Introduce the notion of \textit{canonical} and \textit{sub-canonical} topology.
     Explain how to characterize them via the Yoneda embedding.
 \end{itemize}
+}
 
 \printbibliography
 \vfill
