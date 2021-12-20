@@ -34,7 +34,7 @@
 \newtheorem{xca}[thm]{Exercise}
 \theoremstyle{remark}
 \newtheorem{rem}[thm]{Remark}
-\newtheorem*{cav}{Caveat}
+\newtheorem{cav}{Caveat}
 \Crefname{thm}{Theorem}{Theorems}
 \Crefname{lm}{Lemma}{Lemmas}
 \Crefname{prop}{Proposition}{Propositions}
@@ -55,7 +55,6 @@
 \thanks{The author gratefully acknowledges support by the DFG-Graduiertenkolleg GK1821 ``Cohomological Methods in Geometry'' at the University of Freiburg.}
 \date{\today}
 
-\setcounter{tocdepth}{1}
 \sloppy
 \makeatletter
 \hypersetup{
@@ -131,7 +130,7 @@ Here is a list with some categories that we might use:
 
 {\color[rgb]{0.2,0.2,0.6}
 \begin{itemize}
-  \item Recall limits and fibered products.
+  \item Recall limits and fiber products.
   \item Recall the notion of presite and pretopology from previous talk, and the example that different pretopologies on the same categories may have the same associated category of sheaves.
   \item Using the Yoneda Lemma, explain how to every covering family of an object in a presite can be attached a sub-functor of the corresponding representable functor, and introduce the notion of \textit{sieve} on an object in a category.
 \end{itemize}
@@ -329,7 +328,7 @@ We need to make a few things precise here:
   Show that the morphism $\operatorname{Eq}(f,g) \to A$ is a monomorhpism in $\mathbf{C}$.
 \end{xca}
 
-\subsection{Fibered products}
+\subsection{Fiber products}
 
 These are particular cases of limits, but they will be so relevant later on that they deserve their own subsection.
 We take $\mathbf{I}$ to be the category
@@ -340,12 +339,12 @@ We take $\mathbf{I}$ to be the category
   \end{tikzcd}
 \end{center}
 
-The limit of a diagram $F \colon \mathbf{I} \to \mathbf{C}$ is called a \textit{fibered product} in $\mathbf{C}$.
-Before looking at particular examples, let us introduce some notation and terminology around fibered products.
+The limit of a diagram $F \colon \mathbf{I} \to \mathbf{C}$ is called a \textit{fiber product} in $\mathbf{C}$.
+Before looking at particular examples, let us introduce some notation and terminology around fiber products.
 Consider two morphisms $f \colon B \to A$ and $g \colon C \to A$ in $\mathbf{C}$.
-Their fibered product is denoted by $B \times_{A} C$.
+Their fiber product is denoted by $B \times_{A} C$.
 If we need to be precise about the morphisms $f$ and $g$, we can also use the notation $B \times_{f,A,g} C$.
-By definition of the limit, the fibered product $B \times_{A} C$ comes with two projections $p_{1} \colon B \times_{A} C \to B$ and $p_{2} \colon B \times_{A} C \to C$ which fit into a commutative diagram as follows:
+By definition of the limit, the fiber product $B \times_{A} C$ comes with two projections $p_{1} \colon B \times_{A} C \to B$ and $p_{2} \colon B \times_{A} C \to C$ which fit into a commutative diagram as follows:
 \begin{center}
   \begin{tikzcd}
     B \times_{A} C \arrow[swap]{d}{p_{1}} \arrow{r}{p_{2}} & C \arrow{d}{g} \\
@@ -430,11 +429,11 @@ The same is true for monomorphisms, but not necessarily true for epimorphisms.
   A comprehensive list of properties of morphisms which are stable under pull back in algebraic geometry can be found in \cite[Appendix C]{gw10}.
 \end{rem}
 
-Let us finally come to particular examples of fibered products.
+Let us finally come to particular examples of fiber products.
 We want to abstract the theory of sheaves on topological spaces into a theory of sheaves on categories, so let us focus on the category $\mathbf{Top}$ for the remaining of this subsection.
 
 Let $f \colon Y \to X$ and $g \colon Z \to X$ be two continuous maps between topological spaces.
-Then their fibered product can be constructed as
+Then their fiber product can be constructed as
 \[ Y \times_{X} Z = \{ (y,z) \in Y \times Z \mid f(y) = g(z) \}. \]
 This set is endowed with the subspace topology and the projections $p_{1} \colon Y \times_{X} Z \to Y$ and $p_{2} \colon Y \times_{X} Z \to Z$ are the restrictions of the projections from the cartesian product.
 
@@ -448,7 +447,7 @@ This set is endowed with the subspace topology and the projections $p_{1} \colon
       U \arrow[hookrightarrow]{r} & X
     \end{tikzcd}
   \end{center}
-  Note that $f^{-1}(U)$ is not equal to the fibered product as described above, cf.~\Cref{rem:cartesian}.
+  Note that $f^{-1}(U)$ is not equal to the fiber product as described above, cf.~\Cref{rem:cartesian}.
 \end{exmp}
 
 A particular example of the previous example is the following:
@@ -517,7 +516,7 @@ To close this subsection, let us mention a couple more facts that we may or may 
 \end{exmp}
 
 \begin{xca}
-  Construct the fibered product of a diagram
+  Construct the fiber product of a diagram
   \begin{center}
     \begin{tikzcd}
       & C \arrow{d} \\
@@ -525,9 +524,272 @@ To close this subsection, let us mention a couple more facts that we may or may 
     \end{tikzcd}
   \end{center}
   of sets using only products and equalizers.
-  (There is nothing special about the category of sets nor about the fibered product; we've already seen in previous talks that this can be done for every kind of limit in any category.
+  (There is nothing special about the category of sets nor about the fiber product; we've already seen in previous talks that this can be done for every kind of limit in any category.
   But the computations are simpler in this case.)
 \end{xca}
+
+\subsection{The Yoneda embedding}
+
+Let $\mathbf{C}$ be a category and let $X$ be an object in $\mathbf{C}$.
+We denote by $h_{X}$ the presheaf
+\[ Y \mapsto h_{X}(Y) := \operatorname{Hom}(Y,X) \]
+with restriction morphisms $h_{X}(f) = (-) \circ f$.
+If $f \colon X \to Y$ is a morphism in $\mathbf{C}$, then we obtain a morphism $h_{f} \colon h_{X} \to h_{Y}$ given by $f \circ (-)$.
+In this way we obtain a functor
+\[ h \colon \mathbf{C} \to \mathbf{PSh}(\mathbf{C}), \]
+and as a consequence of the Yoneda lemma we know that this is a fully faithful functor.
+This means that we may as well think of the object $X$ as the presheaf $h_{X}$, and we do not lose any information by doing so.
+
+Suppose that we have now a diagram
+\begin{center}
+  \begin{tikzcd}
+    & Z \arrow{d} \\
+    Y \arrow{r} & X
+  \end{tikzcd}
+\end{center}
+in $\mathbf{C}$.
+It may well happen that the fiber product $Y \times_{X} Z$ does not exist in $\mathbf{C}$.
+But we have seen in previous talks that limits of presheaves always exist and can be computed point-wise, so the fiber product $h_{Y} \times_{h_{X}} h_{Z}$ does exist in $\mathbf{PSh}(\mathbf{C})$.
+Explicitly, this is the presheaf given on objects by
+\[ T \mapsto \operatorname{Hom}(T,Y) \times_{\operatorname{Hom}(T,X)} \operatorname{Hom}(T,Z). \]
+The fiber product $Y \times_{X} Z$ exists in $\mathbf{C}$ if and only if this presheaf is representable, i.e., if there exists an object $L$ in $\mathbf{C}$ such that $h_{L} \cong h_{Y} \times_{h_{X}} h_{Z}$.
+Spelling out the definitions we see that in this case such an object $L$ is necessarily a fiber product $Y \times_{X} Z$.
+
+\begin{cav}
+  From now on we may allow ourselves a slight abuse of terminology and notation and think and talk about an object $X$ in a category $\mathbf{C}$ as if it was really the same as the corresponding presheaf $h_{X}$.
+  So we may say stuff like ``the fiber product $Y \times_{X} Z$ is representable'' instead of saying ``the fiber product $Y \times_{X} Z$ exists''.
+  Forcing ourselves to have this flexibility may make some of the upcoming concepts more natural.
+\end{cav}
+
+\subsection{Pretopologies}
+
+Let $X$ be a topological space and let $\mathscr{F}$ be a presheaf on $X$.
+Let $U$ be an open subset of $X$ and let $\{U_{i}\}_{i \in I}$ be an open covering of $U$.
+First define a morphism
+\begin{align*}
+  \rho \colon \mathscr{F}(U) & \to \prod_{i \in I} \mathscr{F}(U_{i}) \\
+  s & \mapsto (s|_{U_{i}})_{i \in I}
+\end{align*}
+induced by each restriction morphism $\rho^{U}_{U_{i}} \colon \mathscr{F}(U) \to \mathscr{F}(U_{i}), s \mapsto s|_{U_{i}}$ and the universal property of the product.
+Next we want to restrict each family of sections $(s_{i})_{i \in I}$ in $\prod_{i \in I} \mathscr{F}(U_{i})$ to the intersections $U_{i} \cap U_{j}$.
+There are two ways to do this.
+The first one corresponds to the morphism
+\begin{align*}
+  \sigma_{1} \colon \prod_{i \in I} \mathscr{F}(U_{i}) & \to \prod_{(i, j) \in I \times I} \mathscr{F}(U_{i} \cap U_{j}) \\
+  (s_{i})_{i \in I} & \mapsto \left(\rho^{U_{i}}_{U_{i} \cap U_{j}}(s_{i})\right)_{(i, j) \in I \times I},
+\end{align*}
+and the second one corresponds to the morphism
+\begin{align*}
+  \sigma_{2} \colon \prod_{i \in I} \mathscr{F}(U_{i}) & \to \prod_{(i, j) \in I \times I} \mathscr{F}(U_{i} \cap U_{j}) \\
+  (s_{i})_{i \in I} & \mapsto \left(\rho^{U_{j}}_{U_{i} \cap U_{j}}(s_{j})\right)_{(i, j) \in I \times I}.
+\end{align*}
+The presheaf $\mathscr{F}$ is a sheaf if and only if for every $U$ and every open cover $\{U_{i}\}_{i \in I}$ the diagram
+\begin{center}
+  \begin{tikzcd}
+    \mathscr{F}(U) \arrow{r}{\rho} & \prod_{i \in I} \mathscr{F}(U_{i}) \arrow[shift left=2]{r}{\sigma_{1}} \arrow[swap, shift right=2]{r}{\sigma_{2}} & \prod_{(i, j) \in I \times I} \mathscr{F}(U_{i} \cap U_{j})
+  \end{tikzcd}
+\end{center}
+is exact, meaning that the left arrow is an equalizer of the two parallel arrows on the right.
+We will refer to this as the \textit{sheaf condition} with respect to the open cover $\{ U_{i} \}_{i \in I}$.
+
+In order to state the sheaf condition we had to use the notion of an open cover of an open subset in $X$ and we needed to consider intersections of elements in the open cover as well.
+So we were looking at open covers of objects in $\mathbf{Op}(X)$ and we were considering fiber products of elements of the cover.
+We axiomatize the relevant properties of open covers in order to make sense of the sheaf condition in arbitrary categories other than $\mathbf{Op}(X)$ for a topological space $X$.
+
+In particular, we will need to assume the existence of fiber products.
+So it is convenient to introduce the following definition first:
+
+\begin{defn}[Quarrable morphism]
+  Let $\mathbf{C}$ be a category.
+  A morphism $f \colon X \to Y$ in $\mathbf{C}$ is called \textit{quarrable} if for every morphism $Z \to Y$ in $\mathbf{C}$ the fiber product $X \times_{Y} Z$ is representable.
+\end{defn}
+
+We are now in a more comfortable position to introduce the following:
+
+\begin{defn}[Pretopology]
+  Let $\mathbf{C}$ be a category.
+  A \textit{pretopology} on $\mathbf{C}$ consists of the data, for each object $X$ in $\mathbf{C}$, of a set $\operatorname{Cov}(X)$ of sets $\{ X_{i} \to X \}_{i \in I}$ of morphism in $\mathbf{C}$ with target $X$, subject to the following axioms:
+  \begin{enumerate}[label=PT \arabic*)]\addtocounter{enumi}{-1}
+    \item For every object $X$ in $\mathbf{C}$, every $\{ X_{i} \to X \}_{i \in I}$ in $\operatorname{Cov}(X)$ and every $i \in I$, the morphism $X_{i} \to X$ is quarrable.\label{pt:0}
+    \item For every object $X$ in $\mathbf{C}$, every $\{ X_{i} \to X \}_{i \in I}$ in $\operatorname{Cov}(X)$ and every morphism $f \colon Y \to X$ in $\mathbf{C}$, the set $\{ X_{i} \times_{X} Y \to Y \}_{i \in I}$ is in $\operatorname{Cov}(Y)$.
+      (Stability under base change.)\label{pt:1}
+    \item Let $X$ be an object in $\mathbf{C}$, let $\{ X_{i} \to X \}_{i \in I}$ be a set in $\operatorname{Cov}(X)$ and for each $i \in I$ let $\{ X_{i,j} \to X_{i}\}_{j \in J_{i}}$ be a set in $\operatorname{Cov}(X_{i})$.
+      Then the set of compositions $\{ X_{i,j} \to X \}_{i \in I, j \in J_{i}}$ is in $\operatorname{Cov}(X)$.
+      (Stability under composition.)\label{pt:2}
+    \item The collection $\{ X \xrightarrow{\operatorname{id}_{X}} X \}$ is in $\operatorname{Cov}(X)$.\label{pt:3}
+  \end{enumerate}
+\end{defn}
+
+We will call a collection $\{ X_{i} \to X \}_{i \in I}$ in $\operatorname{Cov}(X)$ a \textit{covering} of $X$ in $\mathbf{C}$ (endowed with this pretopology).
+We will also use $\operatorname{Cov}(\mathbf{C})$ to denote the collection of all coverings in a given pretopology on $\mathbf{C}$.
+
+\begin{rem}
+  This is the definition in \cite{sga4}.
+  In \cite{stacks-project}, condition \ref{pt:3} is apparently strengthened a bit to ask that every isomorphism $\{ Y \xrightarrow{\cong} X \}$ is in $\operatorname{Cov}(X)$.
+  But this follows from \ref{pt:3}, \ref{pt:1} and the cartesian square
+  \begin{center}
+    \begin{tikzcd}
+      Y \arrow[phantom, "\lrcorner"]{dr} \arrow{r} \arrow{d} & X \arrow[equal]{d} \\
+      X \arrow[equal]{r} & X
+    \end{tikzcd}
+  \end{center}
+\end{rem}
+
+\begin{xca}
+  Convince yourself that open coverings of an open subset of a topological space have the properties above.
+\end{xca}
+
+Once we have endowed our category $\mathbf{C}$ with a pretopology, we can ask ourselves whether a given presheaf $\mathscr{F}$ in $\mathbf{PSh}(\mathbf{C})$ is a \textit{sheaf} with respect to this pretopology.
+The definition is the same as it was for topological spaces.
+For each object $X$ in $\mathbf{C}$ and each covering $\{ X_{i} \xrightarrow{f_{i}} X \}_{i \in I}$ we define the morphism $\rho \colon \mathscr{F}(X) \to \prod_{i \in I} \mathscr{F}(X_{i})$ by applying the universal property of the product to the morphisms $\mathscr{F}(f_{i}) \colon \mathscr{F}(X) \to \mathscr{F}(X_{i})$.
+For each $(i, j) \in I \times I$ we have a cartesian diagram as follows:
+\begin{center}
+  \begin{tikzcd}
+    X_{i} \times_{X} X_{j} \arrow[phantom, "\lrcorner"]{dr} \arrow{r}{p_{2}^{(i,j)}} \arrow[swap]{d}{p_{1}^{(i,j)}} & X_{j} \arrow{d}{f_{j}} \\
+    X_{i} \arrow[swap]{r}{f_{i}} & X
+  \end{tikzcd}
+\end{center}
+The first morphism $\sigma_{1} \colon \prod_{i \in I} \mathscr{F}(X_{i}) \to \prod_{(i, j) \in I \times I} \mathscr{F}(X_{i} \times_{X} X_{j})$ is the one induced by the morphisms $\mathscr{F}(p_{1}^{(i,j)})$, and the second morphism $\sigma_{2}$ is the one induced by the morphisms $\mathscr{F}(p_{2}^{(i,j)})$.
+The presheaf $\mathscr{F}$ is then a sheaf if and only if for every object $X$ in $\mathbf{C}$ and every cover $\{ X_{i} \to X \}_{i \in I}$ in $\operatorname{Cov}(X)$ the diagram
+\begin{center}
+  \begin{tikzcd}
+    \mathscr{F}(X) \arrow{r}{\rho} & \prod_{i \in I} \mathscr{F}(X_{i}) \arrow[shift left=2]{r}{\sigma_{1}} \arrow[swap, shift right=2]{r}{\sigma_{2}} & \prod_{(i, j) \in I \times I} \mathscr{F}(X_{i} \times_{X} X_{j})
+  \end{tikzcd}
+\end{center}
+is exact.
+We will refer to this as the \textit{sheaf condition} with respect to the cover $\{ X_{i} \to X \}_{i \in I}$.
+
+\begin{lm}\label{lm:refinement}
+  Let $X$ be a topological space and let $\mathscr{F}$ be a presheaf on $X$.
+  Let $U \subseteq X$ be an open subset and let $\{ U_{i} \}_{i \in I}$ be an open cover of $U$.
+  Let $\{ V_{j} \}_{j \in J}$ be a refinement of $\{ U_{i} \}_{i \in I}$, i.e., $\{ V_{j} \}_{j \in J}$ is still an open cover of $U$ and for every $j \in J$ there exists some $i \in I$ such that $V_{j} \subseteq U_{i}$.
+  \begin{enumerate}[label=(\alph*)]
+    \item If $\mathscr{F}(U) \to \prod_{j \in J} \mathscr{F}(V_{j})$ is injective, then so is $\mathscr{F}(U) \to \prod_{i \in I} \mathscr{F}(U_{i})$.
+    \item If $\mathscr{F}$ satisfies the sheaf condition with respect to $\{ V_{j} \}_{j \in J}$ and for every $i \in I$ the map $\mathscr{F}(U_{i}) \to \prod_{j \in J} \mathscr{F}(V_{j} \cap U_{i})$ is injective, then $\mathscr{F}$ satisfies the sheaf condition with respect to $\{ U_{i} \}_{i \in I}$.
+  \end{enumerate}
+  \begin{proof}
+    Using the axiom of choice we may fix a function $\beta \colon J \to I$ such that $V_{j} \subseteq U_{\beta(j)}$ for all $j \in J$.
+
+    We first show $(a)$.
+    Suppose that $s, t \in \mathscr{F}(U)$ are sections such that $s|_{U_{i}} = t|_{U_{i}}$ for all $i \in I$.
+    Then we have
+    \[ s|_{V_{j}} = (s|_{U_{\beta(j)}})|_{V_{j}} = (t|_{U_{\beta(j)}})|_{V_{j}} = t|_{V_{j}} \]
+    for all $j \in J$, so $s = t$.
+
+    Let us show $(b)$ now.
+    The sheaf condition for $\{ V_{j} \}_{j \in J}$ tells us that for every family of sections $(s_{j})_{j \in J} \in \prod_{j \in J} \mathscr{F}(V_{j})$ such that for each $(j_{1},j_{2}) \in J \times J$ we have
+    \[ s_{j_{1}}|_{V_{j_{1}} \cap V_{j_{2}}} = s_{j_{2}}|_{V_{j_{1}} \cap V_{j_{2}}} \]
+    there exists a unique section $s \in \mathscr{F}(U)$ such that $s_{j} = S|_{V_{j}}$ for all $j \in J$.
+    To check the sheaf condition for $\{ U_{i} \}_{i \in I}$, let now $(s_{i})_{i \in I} \in \prod_{i \in I}\mathscr{F}(U_{i})$ be a family of sections such that for every $(i_{1}, i_{2}) \in I \times I$ we have
+    \[ s_{i_{1}}|_{U_{i_{1}} \cap U_{i_{2}}} = s_{i_{2}}|_{U_{i_{1}} \cap U_{i_{2}}}. \]
+    We define a collection $(t_{j})_{j \in J} \in \prod_{j \in J} \mathscr{F}(V_{j})$ as follows.
+    Then we set $t_{j} := s_{\beta(j)}|_{V_{j}}$ for each $j \in J$.
+    So we have a collection $(t_{j})_{j \in J} \in \prod_{j \in J} \mathscr{F}(V_{j})$.
+    Then we have
+    \[ t_{j_{1}}|_{V_{j_{1}} \cap V_{j_{2}}} = (s_{\beta(j_{1})}|_{U_{\beta(j_{1})} \cap U_{\beta(j_{2})}})|_{V_{j_{1}} \cap V_{j_{2}}} = (s_{\beta(j_{2})}|_{U_{\beta(j_{1})} \cap U_{\beta(j_{2})}})|_{V_{j_{1}} \cap V_{j_{2}}} = t_{j_{2}}|_{V_{j_{1}} \cap V_{j_{2}}} \]
+    for all $(j_{1}, j_{2}) \in J \times J$.
+    Hence there exists a unique $s \in \mathscr{F}(U)$ such that $t_{j} = s|_{V_{j}}$ for all $j \in J$.
+    It remains to show now that $s|_{U_{i}} = s_{i}$ for all $i \in I$.
+    By assumption, the map $\mathscr{F}(U_{i}) \to \prod_{j \in J} \mathscr{F}(V_{j} \cap U_{i})$ is injective for every $i \in I$, so it suffices to show that $s|_{U_{i}}$ and $s_{i}$ have the same image under this map.
+    But now
+    \[ s|_{V_{j} \cap U_{i}} = t_{j}|_{V_{j} \cap U_{i}} = (s_{\beta(j)}|_{U_{\beta(j)} \cap U_{i}})|_{V_{j} \cap U_{i}} = (s_{i}|_{U_{\beta(j)} \cap U_{i}})|_{V_{j} \cap U_{i}} = s_{i}|_{V_{j} \cap U_{i}}. \]
+  \end{proof}
+\end{lm}
+
+\begin{rem}
+  Essentially the same proof works in the context of categories and pretopologies, requiring only some slightly more involved notation and some extra assumptions to ensure existence of fiber products, cf.~\cite[\href{https://stacks.math.columbia.edu/tag/0G1L}{Tag 0G1L}]{stacks-project}.
+\end{rem}
+
+\begin{cor}\label{cor:refinement}
+  Let $\mathbf{C}$ be a category.
+  For simplicity, let us assume that all fiber products exist in $\mathbf{C}$.
+  Let $\operatorname{Cov}_{1}(\mathbf{C})$ and $\operatorname{Cov}_{2}(\mathbf{C})$ be two pretopologies on $\mathbf{C}$ and assume that every cover $\{ U_{i} \xrightarrow{f_{i}} X \}_{i \in I}$ in $\operatorname{Cov}_{1}(\mathbf{C})$ admits a refinement $\{ V_{j} \xrightarrow{g_{j}} X \}_{j \in J}$ in $\operatorname{Cov}_{2}(\mathbf{C})$, meaning that there exists a function $\beta \colon J \to I$ and for each $j \in J$ a morphism $\alpha_{j} \colon V_{j} \to U_{\beta(j)}$ such that the diagram
+  \begin{center}
+    \begin{tikzcd}
+      V_{j} \arrow[swap]{dr}{g_{j}} \arrow{r}{\alpha_{j}} & U_{\beta(j)} \arrow{d}{f_{\beta(j)}} \\
+      & X
+    \end{tikzcd}
+  \end{center}
+  commutes.
+  If a presheaf $\mathscr{F}$ is a sheaf with respect to the pretopology given by $\operatorname{Cov}_{2}(\mathbf{C})$, then it is also a sheaf with respect to the pretopology given by $\operatorname{Cov}_{1}(\mathbf{C})$.
+  \begin{proof}
+    Part $(a)$ of \Cref{lm:refinement} ensures that $\mathscr{F}$ is separated with respect to the pretopology $\operatorname{Cov}_{1}(\mathbf{C})$, which in turn allows us to apply part $(b)$ of \Cref{lm:refinement}.
+  \end{proof}
+\end{cor}
+
+This already hints at the main motivation point for this talk:~different pretopologies may give rise to the same notion of sheaf on a category.
+A bit like when one defines a notion of smooth function on a topological manifold; different smoothly compatible atlases may give rise to the same notion of smooth function.
+A way to solve this is to define a smooth structure on a topological manifold as a maximal smoothly compatible atlas.
+This solution has a similar flavour to the one that we will adopt in our situation; we will come back to this later on.
+
+\begin{exmp}
+  Let $X$ be a set and consider the \textit{indiscrete topology} $\{ \varnothing, X \}$ on $X$.
+  If $U \subseteq X$ is an open subset, the only possible open covers of $U$ are $\{ U \}$ and $\{ \varnothing, U \}$.
+  If we want $\mathscr{F}$ to be sheaf, we need at the very least that $\mathscr{F}(\varnothing) = \{ * \}$, because we can always take the empty covering of the empty set and an empty product of sets is a terminal object in $\mathbf{Set}$, i.e., a singleton.
+  But other than that, there is no restriction on $\mathscr{F}$ to be a sheaf.
+  Indeed, assume $\mathscr{F}(\varnothing) = \{ * \}$ and let $U \subseteq X$ be a non-empty open subset.
+  Let us first consdier the open cover $\{ U \}$ of $U$.
+  Let $\Delta_{U} = \{ (x,y) \in U \times U \mid x = y \}$, which is isomorphic to $U$.
+  Then we have a cartesian square
+  \begin{center}
+    \begin{tikzcd}
+      \Delta_{U} \arrow[phantom, "\lrcorner"]{dr} \arrow[swap]{d}{p_{1}} \arrow{r}{p_{2}} & U \arrow[equal]{d} \\
+      U \arrow[equal]{r} & U
+    \end{tikzcd}
+  \end{center}
+  The sheaf condition with respect to this cover translates into the diagram
+  \begin{center}
+    \begin{tikzcd}
+      \mathscr{F}(U) \arrow[equal]{r} & \mathscr{F}(U) \arrow[shift left=2]{r}{p_{1}^{*}} \arrow[shift right=2, swap]{r}{p_{2}^{*}} & \mathscr{F}(\Delta_{U})
+    \end{tikzcd}
+  \end{center}
+  being exact, where we use the shorthand notation $p_{i}^{*}$ instead of $\mathscr{F}(p_{i})$ for each $i \in \{ 1, 2 \}$.
+  Commtuativity of the cartesian diagram above implies that $p_{1} = p_{2}$, hence $p_{1}^{*} = p_{2}^{*}$ and the diagram is indeed exact.
+  Let us now consider the cover $\{ \varnothing, U \}$ of $U$.
+  Then we want the following diagram to be exact:
+  \begin{center}
+    \begin{tikzcd}
+      \mathscr{F}(U) \arrow{r}{\rho} & \mathscr{F}(\varnothing) \times \mathscr{F}(U) \arrow[shift left=2]{d}{\sigma_{1}} \arrow[swap, shift right=2]{d}{\sigma_{2}} \\
+      & \mathscr{F}(\varnothing \times_{U} \varnothing) \times \mathscr{F}( \varnothing \times_{U} U) \times \mathscr{F}(U \times_{U} \varnothing) \times \mathscr{F}(U \times_{U} U)
+    \end{tikzcd}
+  \end{center}
+  The morphism $\rho \colon \mathscr{F}(U) \to \{ * \} \times \mathscr{F}(U)$ is an isomorphism, so we need to check that $\sigma_{1} = \sigma_{2}$.
+  Let $(*,s) \in \mathscr{F}(\varnothing) \times \mathscr{F}(U)$.
+  Then we have
+  \[ \sigma_{1}(*,s) = (*,*,*,p_{1}^{*}(s)) = (*,*,*,p_{2}^{*}(s)) = \sigma_{2}(*,s), \]
+  hence this second diagram is exact as well.
+
+  This whole discussion shows that the presheaf $\mathscr{F}$ is a sheaf if and only if $\mathscr{F}(\varnothing) = \{ * \}$.
+  Being a sheaf in the topological sense is the same as being a sheaf in the category $\mathbf{Op}(X)$ with the pretopology $\operatorname{Cov}_{1}$ given by all possible open covers of all open subsets.
+  Let now $\operatorname{Cov}_{2}$ be the \textit{indiscrete pretopology} on $\mathbf{Ob}(X)$,
+  in which $\{ U \}$ is the only cover of an open subset $U \subseteq X$.
+  The difference here is that we are not allowing the empty covering of the empty set.
+  We are in the assumptions of \Cref{cor:refinement}, because every cover of an open subset $U \subseteq X$ in the indiscrete pretopology can be refined by an open cover, i.e., by a cover in the pretoplogy $\operatorname{Cov}_{1}$.
+  So every presehaf $\mathscr{F}$ which is a sheaf in the topological sense, i.e., with respect to the pretopology $\operatorname{Cov}_{1}$, is also a sheaf with respect to the indiscrete pretopology $\operatorname{Cov}_{2}$.
+  Indeed, in this case this is easily seen to be the case, because every presheaf $\mathscr{F}$ with $\mathscr{F}(\varnothing) = \{ * \}$ is in particular a presheaf.
+\end{exmp}
+
+\begin{exmp}
+  Let $X$ be a topological space and let $\mathcal{B}$ be a basis for the topology, i.e., a collection of open subsets of $X$ such that
+  \begin{enumerate}
+    \item The elements of $\mathcal{B}$ cover $X$, i.e., for every $x \in X$ there exists some $B \in \mathcal{B}$ such that $x \in B$.
+    \item Given two elements $B_{1}, B_{2} \in \mathcal{B}$ and given a point $x \in B_{1} \cap B_{2}$, there exists some $B_{3} \in \mathcal{B}$ such that $x \in B_{3}$ and $B_{3} \subseteq B_{1} \cap B_{2}$.
+  \end{enumerate}
+  We take $\operatorname{Cov}_{1}$ as the topological pretopology on $\mathbf{Op}(X)$, in which the coverings are just the open covers of open subsets of $X$; and we take $\operatorname{Cov}_{2}$ as the pretopology on $\mathbf{Op}(X)$ in which the open covers are the open covers of open subsets of $X$ whose elements are all in $\mathcal{B}$.
+  Then a presheaf $\mathscr{F}$ is a $\operatorname{Cov}_{1}$ sheaf if and only if it is a $\operatorname{Cov}_{2}$ sheaf.
+  
+  Indeed, we can apply \Cref{cor:refinement} to deduce the claim.
+  If $\{ U_{i} \}_{i \in I}$ is a cover of $U\subseteq X$ in $\operatorname{Cov}_{2}$, then it is also a cover of $U\subseteq X$ in $\operatorname{Cov}_{1}$, because we were assuming that the elements of our basis $\mathcal{B}$ are all open.
+  This shows that a $\operatorname{Cov}_{1}$ sheaf is also a $\operatorname{Cov}_{2}$ sheaf.
+  (Note that in this case it is really on the nose, since $\operatorname{Cov}_{2} \subseteq \operatorname{Cov}_{1}$, so we are just checking a smaller amount of conditions.)
+  Conversely, every usual open cover of $U \subseteq X$ admits a refinement by elements of the basis $\mathcal{B}$, so every $\operatorname{Cov}_{2}$ sheaf is a $\operatorname{Cov}_{1}$ sheaf.
+\end{exmp}
+
+In fact, it would even suffice to define a presheaf on a basis for the topology to obtain a presheaf on $\mathbf{Op}(X)$, cf.~\cite[Chapter 0, (3.2.1)]{ega}.
+
+\subsection{Sieves}
+
+
 
 
 \section{Grothendieck topologies}
