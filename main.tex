@@ -1,4 +1,4 @@
-\documentclass[12pt,a4paper]{amsart}
+\documentclass[12pt,reqno,a4paper]{amsart}
 
 \usepackage{libertine}
 \usepackage[libertine]{newtxmath}
@@ -30,6 +30,7 @@
 \newtheorem{cor}[thm]{Corollary}
 \theoremstyle{definition}
 \newtheorem{defn}[thm]{Definition}
+\newtheorem{defnlm}[thm]{Definition-Lemma}
 \newtheorem{exmp}[thm]{Example}
 \newtheorem{xca}[thm]{Exercise}
 \theoremstyle{remark}
@@ -40,6 +41,7 @@
 \Crefname{prop}{Proposition}{Propositions}
 \Crefname{cor}{Corollary}{Corollaries}
 \Crefname{defn}{Definition}{Definitions}
+\Crefname{defnlm}{Definition-Lemma}{Definition-Lemmas}
 \Crefname{exmp}{Example}{Examples}
 \Crefname{xca}{Exercise}{Exercises}
 \Crefname{rem}{Remark}{Remarks}
@@ -127,14 +129,6 @@ Here is a list with some categories that we might use:
 \end{itemize}
 
 \section{Recollections from previous talks}
-
-{\color[rgb]{0.2,0.2,0.6}
-\begin{itemize}
-  \item Recall limits and fiber products.
-  \item Recall the notion of presite and pretopology from previous talk, and the example that different pretopologies on the same categories may have the same associated category of sheaves.
-  \item Using the Yoneda Lemma, explain how to every covering family of an object in a presite can be attached a sub-functor of the corresponding representable functor, and introduce the notion of \textit{sieve} on an object in a category.
-\end{itemize}
-}
 
 \subsection{Limits}
 
@@ -609,7 +603,7 @@ We are now in a more comfortable position to introduce the following:
 \begin{defn}[Pretopology]
   Let $\mathbf{C}$ be a category.
   A \textit{pretopology} on $\mathbf{C}$ consists of the data, for each object $X$ in $\mathbf{C}$, of a set $\operatorname{Cov}(X)$ of sets $\{ X_{i} \to X \}_{i \in I}$ of morphism in $\mathbf{C}$ with target $X$, subject to the following axioms:
-  \begin{enumerate}[label=PT \arabic*)]\addtocounter{enumi}{-1}
+  \begin{enumerate}[label=(PT\arabic*)]\addtocounter{enumi}{-1}
     \item For every object $X$ in $\mathbf{C}$, every $\{ X_{i} \to X \}_{i \in I}$ in $\operatorname{Cov}(X)$ and every $i \in I$, the morphism $X_{i} \to X$ is quarrable.\label{pt:0}
     \item For every object $X$ in $\mathbf{C}$, every $\{ X_{i} \to X \}_{i \in I}$ in $\operatorname{Cov}(X)$ and every morphism $f \colon Y \to X$ in $\mathbf{C}$, the set $\{ X_{i} \times_{X} Y \to Y \}_{i \in I}$ is in $\operatorname{Cov}(Y)$.
       (Stability under base change.)\label{pt:1}
@@ -722,7 +716,7 @@ A bit like when one defines a notion of smooth function on a topological manifol
 A way to solve this is to define a smooth structure on a topological manifold as a maximal smoothly compatible atlas.
 This solution has a similar flavour to the one that we will adopt in our situation; we will come back to this later on.
 
-\begin{exmp}
+\begin{exmp}\label{exmp:indiscretetopology}
   Let $X$ be a set and consider the \textit{indiscrete topology} $\{ \varnothing, X \}$ on $X$.
   If $U \subseteq X$ is an open subset, the only possible open covers of $U$ are $\{ U \}$ and $\{ \varnothing, U \}$.
   If we want $\mathscr{F}$ to be sheaf, we need at the very least that $\mathscr{F}(\varnothing) = \{ * \}$, because we can always take the empty covering of the empty set and an empty product of sets is a terminal object in $\mathbf{Set}$, i.e., a singleton.
@@ -787,32 +781,410 @@ This solution has a similar flavour to the one that we will adopt in our situati
 
 In fact, it would even suffice to define a presheaf on a basis for the topology to obtain a presheaf on $\mathbf{Op}(X)$, cf.~\cite[Chapter 0, (3.2.1)]{ega}.
 
-\subsection{Sieves}
+\section{Sieves}
 
+We have seen that two pretopologies on a category $\mathbf{C}$ end up giving the same notion of sheaf if we can always refine the covers of one of the pretopologies by covers in the other pretopology and vice-versa.
+As pointed out earlier, this resembles a bit the situation that one runs into when trying to define smooth structures on topological manifolds naively.
+A solution in that case is to consider only maximal smoothly compatible atlases.
+A solution in our categorical setting will also be very similar to this in flavour:
 
+\begin{defn}[Sieve]
+  Let $\mathbf{C}$ be a category and let $X$ in $\mathbf{C}$ be an object.
+  A \textit{sieve} $S$ on $X$ is a subfunctor $S \subseteq h_{X}$.
+\end{defn}
 
+\begin{rem}
+  Recall that it is convenient to think of $X$ as being the same as the functor $h_{X}$, so we may think of $S$ as a subobject of $X$ in $\mathbf{PSh}(\mathbf{C})$.
+  Conversely, it is also helpful to imagine that $S$ was in fact representable by an object $S$ in $\mathbf{C}$ and think of the map $S \to h_{X}$ as a ``morphism from $S$ to $X$'', cf.~\cite[\href{https://stacks.math.columbia.edu/tag/00YW}{Tag 00YW}]{stacks-project}.
+\end{rem}
+
+Let us spell out what it means for a presheaf $S$ in $\mathbf{PSh}(\mathbf{C})$ to be a subfunctor of $h_{X}$.
+Since it is a functor, we need to describe how it acts on objects and how it acts on morphisms.
+On an object $T$ of $\mathbf{C}$, we want to have a subset
+\[ S(T) \subseteq h_{X}(T) = \operatorname{Hom}(T,X). \]
+Given any morphism $f \colon T \to T'$ in $\mathbf{C}$, we have an induced morphism $(-) \circ f \colon h_{X}(T') \to h_{X}(T)$.
+For $S$ to be a subfunctor of $h_{X}$ we need to have a commutative diagram as follows:
+\begin{center}
+  \begin{tikzcd}
+    S(T') \arrow[hookrightarrow]{r} \arrow[swap]{d}{(-)\circ f} & h_{X}(T') \arrow{d}{(-) \circ f} \\
+    S(T) \arrow[hookrightarrow]{r} & h_{X}(T)
+  \end{tikzcd}
+\end{center}
+
+In other words, a sieve on $X$ consists on a collection of subsets $S(T) \subseteq h_{X}(T)$ such that for all $f \colon T \to T'$ in $\mathbf{C}$ we have that
+\begin{equation}\label{eqn:sieve}
+  (T' \xrightarrow{g} X) \in S(T') \Rightarrow (T \xrightarrow{g \circ f} X) \in S(T).
+\end{equation}
+
+\begin{exmp}\label{exmp:maximalsieve}
+  Let $\mathbf{C}$ be a category and let $X$ be an object in $\mathbf{C}$.
+  Let $S \subseteq h_{X}$ be a sieve such that $\operatorname{id}_{X} \in S(X)$.
+  Then $S = h_{X}$.
+  Indeed, let $f \colon Y \to X$ be a morphism in $\mathbf{C}$.
+  Then $\operatorname{id}_{X} \in S(X)$ implies $f \in S(Y)$ by \Cref{eqn:sieve}.
+\end{exmp}
+
+\begin{rem}
+  It is common (at least in algebraic geometry) to denote
+  \[ X(T) = h_{X}(T) = \operatorname{Hom}(T,X). \]
+  These are called the $T$-valued points of $X$ when $T$ and $X$ are schemes, because if we take for example the scheme $X = \operatorname{Spec}(\mathbb{Z}[x,y]/(x^{2} + y^{2}))$ and we consider a field extension $\mathbb{Q} \subseteq K \subseteq \mathbb{C}$, then the $K$-valued points of $X$ give us the $K$-valued solutions of the defining equation of $X$:
+  \[ X(K) := X(\operatorname{Spec}(K)) = \{ (a,b) \in K^{2} \mid a^{2} + b^{2} = 0\}. \]
+  This notation fits nicely into our usual abuse of notation and terminology in which we do not distinguish between $X$ and $h_{X}$ too much.
+\end{rem}
+
+Some observations:
+
+\begin{lm}[{cf.~\cite[\href{https://stacks.math.columbia.edu/tag/00YZ}{Tag 00YZ}]{stacks-project}}]
+  Let $\mathbf{C}$ be a category and let $X$ be an object in $\mathbf{C}$.
+  \begin{enumerate}
+    \item Inclusion defines a partial ordering among sieves on $X$.
+    \item The union of a colleciton of sieves on $X$ is a sieve on $X$.
+    \item The intersection of a collection of sieves on $X$ is a sieve on $X$.
+    \item The sieve $X = h_{X}$ is the maximal sieve.
+    \item The empty subfunctor is the minimal sieve.
+  \end{enumerate}
+\end{lm}
+
+We will need the following two constructions with sieves:
+
+\begin{defnlm}\label{defnlm:generated}
+  Let $\mathbf{C}$ be a category and let $\{ f_{i} \colon X_{i} \to X \}_{i \in I}$ be a collection of morphisms in $\mathbf{C}$.
+  Then there exists a unique sieve $S$ on $X$, called the \textit{sieve generated} by the collection of morphisms $\{ f_{i} \colon X_{i} \to X \}_{i \in I}$, which is the smallest sieve on $X$ such that for every $i \in I$, the morphism $f_{i} \colon X_{i} \to X$ is in $S(X_{i})$.
+  \begin{proof}
+    We regard every $f_{i} \colon X_{i} \to X$ as a morphism of functors $h_{f_{i}} \colon h_{X_{i}} \to h_{X}$ and we take $S$ to be the union of their images.
+    Explicitly,
+    \[ S(T) = \{ f \colon T \to X \mid \exists i \in I \text{ such that } \exists g \colon T \to X_{i} \text{ with } f = f_{i} \circ g \}. \]
+    We check that \Cref{eqn:sieve} holds.
+    Let $\alpha \colon T \to T'$ be a morphism in $\mathbf{C}$ and let $f \in S(T')$.
+    Then there exists some $i \in I$ and some $g \colon T' \to X_{i}$ such that $f = f_{i} \circ g$.
+    Since $f \circ \alpha = f_{i} \circ (g \circ \alpha)$, we get $f \circ \alpha \in S(T)$ and $S$ is indeed a sieve.
+  \end{proof}
+\end{defnlm}
+
+\begin{defnlm}\label{defnlm:pullback}
+  Let $\mathbf{C}$ be a category, let $f \colon Y \to X$  be a morphism in $\mathbf{C}$ and let $S$ be a sieve on $X$.
+  We define the \textit{pull back} of $S$ by $f$ to be the sieve $S \times_{X} Y$ on $Y$ defined by the rule
+  \[ (\alpha \colon T \to Y) \in (S\times_{X} Y)(T) : \Leftrightarrow (f \circ \alpha \colon T \to X) \in S(T). \]
+  \begin{proof}
+    We check again that \Cref{eqn:sieve} holds.
+    Let $\beta \colon T \to T'$ be a morphism in $\mathbf{C}$ and let $\alpha \in (S\times_{X} Y)(T')$.
+    We want to show that $\alpha \circ \beta \in (S \times_{X} Y)(T)$, i.e., we want to show that $f \circ (\alpha \circ \beta) \in S(T)$.
+    This follows from $f \circ (\alpha \circ \beta) = (f \circ \alpha) \circ \beta$, $f \circ \alpha \in S(T)$ by definition of $S \times_{X} Y$ and from \Cref{eqn:sieve} and the assumption that $S$ is a sieve.
+  \end{proof}
+\end{defnlm}
+
+\begin{rem}
+  The notation suggests that the pull back sieve is related to the fiber product of presheaves in some way.
+  But it cannot be the fiber product on the nose, because we want the pull back of a sieve $S$ on $X$ under a morphism $f \colon Y \to X$ to be a sieve on $Y$, and the fiber product $S \times_{X} Y = S \times_{h_{X}} h_{Y}$ is not necessarily a subfunctor of $h_{Y}$ strictly speaking (the fiber product is only uniquely determined up to isomorphism anyway).
+  So instead we look at the image of $S \times_{X} Y$ in $Y$, i.e., at the image presheaf of the presheaf morphism appearing on the top of the following cartesian square:
+  \begin{center}
+    \begin{tikzcd}
+      S \times_{X} Y \arrow[phantom, "\lrcorner"]{dr} \arrow{d} \arrow{r} & Y \arrow{d}{f} \\
+      S \arrow[hookrightarrow]{r} & X
+    \end{tikzcd}
+  \end{center}
+  The pull back of a monomorphism is a monomorphism, so the abuse of notation of calling $S \times_{X} Y$ and its image in $Y$ the same way is rather harmless.
+\end{rem}
+
+\begin{exmp}\label{exmp:pullbacksieve}
+  Let $\mathbf{C}$ be a category and let $X$ be an object in $\mathbf{C}$.
+  Let $S$ be a sieve on $X$ and let $f \colon Y \to X$ be a morphism in $S$.
+  Then $S \times_{X} Y = h_{Y}$.
+  Indeed, from \Cref{defnlm:pullback} we know that $S \times_{X} Y \subseteq h_{Y}$ is a sieve, so let us prove the other inclusion.
+  Let $T$ be an object in $\mathbf{C}$ and let $\alpha \colon T \to Y$ be any morphism in $\mathbf{C}$.
+  We want to show that $\alpha \in (S \times_{X} Y)(T)$, i.e., we want to show that $f \circ \alpha \in S(T)$.
+  This follows from $f \in S(Y)$ and \Cref{eqn:sieve}.
+\end{exmp}
 
 \section{Grothendieck topologies}
 
-{\color[rgb]{0.2,0.2,0.6}
-\begin{itemize}
-  \item Define the notion of a \textit{Grothendieck topology} on a category and of \textit{site}.
-  \item Give examples including the \textit{chaotic} topology, the \textit{discrete} topology, and the topology \textit{associated} to a given pretopology.
-\end{itemize}
-}
+\begin{defn}[Grothendieck topology]
+  Let $\mathbf{C}$ be a category.
+  A \textit{topology} on $\mathbf{C}$, also called a \textit{Grothendieck topology} on $\mathbf{C}$, consists of the data of a set $J(X)$ of sieves on $X$ for each object $X$ in $\mathbf{C}$, subject to the following axioms:
+  \begin{enumerate}[label=(T\arabic*)]
+    \item Stability under pull back:~for every morphism $f \colon Y \to X$ in $\mathbf{C}$ and every $S \in J(X)$ we have $S \times_{X} Y \in J(Y)$.\label{t:1}
+    \item Locality condition:~if $S$ and $S'$ are sieves on $X$ with $S \in J(X)$ and if for all objects $Y$ of $\mathbf{C}$ and all $f \in S(Y)$ we have $S' \times_{X} Y \in J(Y)$, then $S' \in J(X)$.\label{t:2}
+    \item For every object $X$ in $\mathbf{C}$ we have $X \in J(X)$.\label{t:3}
+  \end{enumerate}
+  The sieves in $J(X)$ are called \textit{covering sieves} of $X$, and a category $\mathbf{C}$ endowed with a topology is called a \textit{site}\footnote{Mind the terminology clash with \cite{stacks-project}.}.
+  We will sometimes use $J$ to denote a topology, so we may say stuff like ``let $(\mathbf{C},J)$ be a site...''
+\end{defn}
+
+Recall that we are trying to abstract the notion of an open cover to a categorical setting in order to work with sheaves on categories.
+Our first attempt was endowing the category $\mathbf{C}$ with a pretopology.
+This is in fact good enough in practice (and even better than what we are about to do), cf.~\cite[\href{https://stacks.math.columbia.edu/tag/00YW}{Tag 00YW}]{stacks-project}.
+But we have seen that different pretopologies may give rise to the same notion of sheaf; so this is not so satisfactory from a conceptual point of view.
+Therefore we have tried to rephrase our definition in terms of sieves, again, in a way somewhat parallel to how one considers a maximal smooth atlas when trying to define a notion of smooth function on a topological manifold.
+Let us now make the comparison more explicit:
+
+\begin{enumerate}\addtocounter{enumi}{-1}
+  \item We do not need \ref{pt:0} any longer, because the pull back of a sieve always exists.
+  \item We continue to require stability under pull back in \ref{t:1} as we did in \ref{pt:1}.
+    This corresponds to the fact that if we have an open cover $\{ U_{i} \}_{i \in I}$ of an open subset $U$ and another open subset $V \subseteq U$, then we obtain an open cover $\{ V \cap U_{i} \}_{i \in I}$ of $V$.
+  \item Condition \ref{t:2} corresponds to the fact that we can check whether a collection $\{ U_{i} \}_{i \in I}$ of subsets of $U$ is an open cover by checking that it restricts to an open cover on each element of an open cover of $U$.
+    (``Open covers are local on the target''.)
+    In the case of a pretopology, we were considering arbitrary families of morphisms with target the object that we are trying to cover, but now we are considering sieves instead.
+    This makes the old \ref{pt:2} obsolete, because stability under composition is baked into the definition of a sieve already.
+  \item We continue to require that identities be coverings in \ref{t:3} as we did in \ref{pt:3}.
+    This corresponds to the fact that $\{ U \}$ is an open cover of the open subset $U$ itself.
+\end{enumerate}
+
+Before seeing a couple of examples, we make the following observation:
+
+\begin{lm}[{\cite[\href{https://stacks.math.columbia.edu/tag/00Z5}{Tag 00Z5}]{stacks-project}}]\label{lm:cofiltered}
+  Let $(\mathbf{C},J)$ be a site and let $X$ be an object in $\mathbf{C}$.
+  \begin{enumerate}
+    \item Finite intersections of elements of $J(X)$ are again in $J(X)$.
+    \item If $S \in J(X)$ and $S' \supseteq S$, then $S' \in J(X)$ as well.
+  \end{enumerate}
+  In particular, the set $J(X)$ ordered with inclusions is cofiltered \cite[\href{https://stacks.math.columbia.edu/tag/04AZ}{Tag 04AZ}]{stacks-project}.
+  \begin{proof}
+    We begin by showing $(1)$.
+    Let's stretch the language more than we perhaps should and take two open covers $S$ and $S'$ of $X$, i.e., let $S, S' \in J(X)$.
+    We check that the collection $S \cap S'$ is again an open cover of $X$, and we do this by arguing locally on the open cover $S$.
+    That is, we want to apply \ref{t:2} to the sieve $S \cap S'$ and the covering sieve $S$.
+    So let $Y$ be an object in $\mathbf{C}$ and let $f \in S(Y)$.
+    Then we have $(S \cap S') \times_{X} Y = S' \times_{X} Y$, because
+    \[ (S \cap S') \times_{X} Y = S \times_{X} S' \times_{X} Y = S \times_{X} Y \times_{X} S' = Y \times_{X} S' = S' \times_{X} Y, \]
+    where in the second to last equality we have used \Cref{exmp:pullbacksieve}.
+    But \ref{t:1} tells us that $S \times_{X} Y$ is in $J(Y)$, so by \ref{t:2} the sieve $S \cap S'$ is again in $J(X)$.
+
+    Let us show $(2)$ now.
+    Let $S \in J(X)$ and let $S' \supseteq S$.
+    We check again locally that this is an open cover of $X$.
+    Let $Y$ be an object in $\mathbf{C}$ and let $f \in S(Y)$.
+    Again using \Cref{exmp:pullbacksieve} we have $S' \times_{X} Y = Y$, because $f \in S(Y) \subseteq S'(Y)$.
+    Hence $S' \times_{X} Y = Y \in J(Y)$ by \ref{t:3}, so $S' \in J(X)$ by \ref{t:2}.
+
+    Finally, for the assertion that $J(X)$ is cofiltered, note that \ref{t:3} implies that it is non-empty and connected, because every $S \in J(X)$ admits a morphism to $X \in J(X)$.
+    Since there is at most one morphism between two covering sieves in the partially ordered set $J(X)$, assertion $(1)$ in this lemma already ensures that $J(X)$ is cofiltered.
+  \end{proof}
+\end{lm}
+
+Knowing that $J(X)$ is cofiltered makes computing limits indexed over $J(X)$ and computing colimits indexed over $J(X)^{\mathrm{op}}$ easier, cf.~\cite[\href{https://stacks.math.columbia.edu/tag/04AX}{Tag 04AX}]{stacks-project}.
+
+\begin{defn}[Finer and coarser topologies]
+  Let $\mathbf{C}$ be a category and let $J$ and $J'$ be two topologies on $\mathbf{C}$.
+  We say that $J$ is \textit{finer} than $J'$, or that $J'$ is \textit{coarser} than $J$, if and only if for every object $X$ in $\mathbf{C}$ we have $J'(X) \subseteq J(X)$.
+\end{defn}
+
+Intuitively a finer topology has more (``smaller'') open subsets than a coarser topology.
+For example, the Euclidean topology on $\mathbb{R}$ is finer than the cofinite topology.
+More generally, the Zariski topology is coarser than the analytic topology.
+
+\begin{defnlm}\label{defnlm:intersection}
+  Let $\mathbf{C}$ be a category and let $\{ J_{i} \}_{i \in I}$ be a collection of topologies on $\mathbf{C}$.
+  Then we define their \textit{intersection} $J = \cap_{i \in I} J_{i}$ point-wise, i.e.,
+  \[ J(X) = \bigcap_{i \in I} J_{i}(X) \]
+  for all objects $X$ of $\mathbf{C}$.
+  A straightforward check shows that \ref{t:1}, \ref{t:2} and \ref{t:3} are satisfied for $J$.
+\end{defnlm}
+
+Let $\mathbf{C}$ be a category and let us define an order on topologies of $\mathbf{C}$ by declaring that $J \leq J'$ if and only if $J'$ is finer than $J$, i.e., if $J(X) \subseteq J'(X)$ for all objects $X$ in $\mathbf{C}$.
+We will also denote this by $J \subseteq J'$.
+The intersection of a family of topologies is the infimum of that collection of topologies, and the intersection of all topologies finer than all the topologies in the family is the supremum of that collection of topologies.
+
+\begin{defn}[Topology generated by a collection of morphisms]\label{defn:generated}
+  Given a collection $\{ f_{i} \}_{i \in I}$ of morphisms in $\mathbf{C}$, we can now define the \textit{topology generated} by this collection of morphisms as the coarsest topology $J$ on $\mathbf{C}$ containing all of them, i.e., for every $i \in I$, if $f_{i} \colon Y_{i} \to X_{i}$, then there exists a covering sieve $S \in J(X_{i})$ such that $f_{i} \in S(Y_{i})$.
+\end{defn}
+
+In particular, we may define the topology generated by a collection $\{ S_{i} \}_{i \in I}$ of sieves in $\mathbf{C}$ as the topology generated by the collection of morphisms $\cup_{X \in \operatorname{Ob}(\mathbf{C})} \cup_{i \in I} S_{i}(X)$.
+
+Let us close this section with some examples.
+
+\begin{exmp}\label{exmp:indiscrete}
+  Let $\mathbf{C}$ be a category.
+  The \textit{indiscrete topology} on $\mathbf{C}$ is the topology $J$ such that for every object $X$ of $\mathbf{C}$ has $J(X) = \{ X \}$.
+  We check the three necessary conditions:
+  \begin{enumerate}[label=(T\arabic*)]
+    \item Let $f \colon Y \to X$ be a morphism in $\mathbf{C}$ and let $S = X \in J(X)$.
+      Then $S \times_{X} Y = X \times_{X} Y = Y \in J(Y)$.
+    \item Let $S$ be a sieve on an object $X$ and let $X \in J(X)$.
+      Suppose that for all objects $Y$ in $\mathbf{C}$ and all morphisms $f \colon Y \to X$ in $X(Y)$ we have $S \times_{X} Y \in J(Y)$.
+      In particular, for $f = \operatorname{id}_{X}$ we have $S \times_{X} X = S \in J(X)$.
+    \item We have $X \in J(X)$ by definition.
+  \end{enumerate}
+
+  The name of this topology comes from the indiscrete topology on a set $X$, in which the open subsets are only $\varnothing$ and $X$.
+\end{exmp}
+
+A finer example:
+
+\begin{exmp}\label{exmp:discretetopology}
+  Let $\mathbf{C}$ be a category.
+  The \textit{discrete topology} on $\mathbf{C}$ is the topology $J$ in which every sieve is a covering sieve.
+  We check again the three necessary conditions:
+  \begin{enumerate}[label=(T\arabic*)]
+    \item The pull back of a sieve is again a sieve by \Cref{defnlm:pullback}.
+    \item This condition is automatically true, because all sieves are covering sieves.
+    \item For every object $X$ of $\mathbf{C}$, $X$ is itself a sieve, so $X \in J(X)$.
+  \end{enumerate}
+
+  The name of this topology comes from the discrete topology on a set $X$, in which every subset of $X$ is open.
+  In this context, in turn, the name discrete comes from the fact that every point of $X$ is isolated in $X$, so it fits our mental picture of a discrete space.
+\end{exmp}
+
+\begin{exmp}\label{exmp:associated}
+  Let $\mathbf{C}$ be a category endowed with a pretopology $\operatorname{Cov}(\mathbf{C})$.
+  We define the topology $J$ \textit{associated} to the pretopology $\operatorname{Cov}(\mathbf{C})$ as follows.
+  For every object $X$ in $\mathbf{C}$, we consider the set $J(X)$ of sieves $S$ on $X$ with the property that there exists a covering $\{ X_{i} \to X\}_{i \in I}$ in $\operatorname{Cov}(\mathbf{C})$ such that $S$ contains the sieve generated by the collection of morphisms $\{ X_{i} \to X \}_{i \in I}$.
+  See \cite[Exposé II, Proposition 1.4]{sga4} for a verification of the three necessary properties.
+  % TODO: include this proof
+\end{exmp}
+
+\begin{rem}\label{rem:associated}
+  Let $\mathbf{C}$ be a category endowed with a pretopology $\operatorname{Cov}(\mathbf{C})$.
+  Then \Cref{lm:cofiltered} implies that the topology associated to $\operatorname{Cov}(\mathbf{C})$ is the coarsest topology on $\mathbf{C}$ containing all morphisms in coverings of $\operatorname{Cov}(\mathbf{C})$, i.e., the topology generated by the collection of morphisms in $\mathbf{C}$ appearing as a morphism in some covering of $\operatorname{Cov}(\mathbf{C})$.
+\end{rem}
 
 \section{Topologies and sheaves}
 
-{\color[rgb]{0.2,0.2,0.6}
-\begin{itemize}
-  \item Define the topology \textit{generated} by a family of sieves.
-    Dually, define the \textit{finest} topology for which all presheaves in a given family are separated/sheaves.
-  \item Show that this defines an order-reversing correspondence between Grothendieck topologies and categories of sheaves.
-    Deduce that a pretopology and the associated topology define the same category of sheaves.
-  \item Introduce the notion of \textit{canonical} and \textit{sub-canonical} topology.
-    Explain how to characterize them via the Yoneda embedding.
-\end{itemize}
-}
+Let us start this section with the following definition, despite it being perhaps slightly unmotivated at this point:
+
+\begin{defn}[Sheaf on a site]
+  Let $(\mathbf{C},J)$ be a site and let $\mathscr{F}$ be a presheaf on $\mathbf{C}$.
+  We say that $\mathscr{F}$ is \textit{separated} (resp.~a \textit{sheaf}) if for every object $X$ in $\mathbf{C}$ and every covering sieve $R \in J(X)$ the induced map
+  \[ \operatorname{Hom}(X,\mathscr{F}) \to \operatorname{Hom}(R,\mathscr{F}) \]
+  is injective (resp.~bijective).
+  We denote by $\mathbf{Sh}(\mathbf{C})$ or $\mathbf{Sh}(\mathbf{C},J)$ the full subcategory of sheaves in $\mathbf{PSh}(\mathbf{C})$.
+\end{defn}
+
+\begin{exmp}\label{exmp:indiscretesheaf}
+  In the indiscrete topology from \Cref{exmp:indiscrete}, a sheaf is the same thing as a presheaf, cf.~\Cref{exmp:indiscretetopology}.
+\end{exmp}
+
+\begin{exmp}\label{exmp:discretesheaf}
+  Let $(\mathbf{C},J)$ be a discrete site as in \Cref{exmp:discretetopology}.
+  For every object $X$ in $\mathbf{C}$, the empty sieve $\varnothing$ is in $J(X)$.
+  Note that the empty sieve is an initial object in the category $\mathbf{PSh}(\mathbf{C})$ of presheaves on $\mathbf{C}$.
+  So if $\mathscr{F}$ is a sheaf in the discrete topology, then by Yoneda we have
+  \[ \mathscr{F}(X) \cong \operatorname{Hom}(X,\mathscr{F}) \cong \operatorname{Hom}(\varnothing, \mathscr{F}) = \{ * \}. \]
+  So only the constant presheaf with value a terminal object is a sheaf in the discrete topology.
+\end{exmp}
+
+Our main goal for the rest of the talk is to check that a pretopology and the associated topology define the same notion of sheaf, and moreover, that there is an order-reversing correspondence between topologies and categories of sheaves.
+
+\begin{defnlm}[Topology generated by a family of presheaves]\label{defnlm:generatedtopology}
+  Let $\mathbf{C}$ be a category and let $\mathbf{F} = \{ \mathscr{F}_{i} \}_{i \in I}$ be a collection of presheaves on $\mathbf{C}$.
+  For each object $X$ of $\mathbf{C}$, we denote by $J_{\mathbf{F}}(X)$ the collection of sieves $R$ on $X$ such that for every morphism $f \colon Y \to X$ in $\mathbf{C}$ the pull back sieve $R \times_{X} Y$ has the property that the induced map
+  \[ \operatorname{Hom}(Y,\mathscr{F}_{i}) \to \operatorname{Hom}(R \times_{X} Y, \mathscr{F}_{i}) \]
+  is bijective (resp.~injective) for all $i \in I$.
+  Then $J_{\mathbf{F}}$ defines a topology on $\mathbf{C}$, called the \textit{topology generated} by the family $\mathbf{F}$ of presheaves, which is the finest topology in which all presheaves $\mathscr{F}_{i}$ are sheaves (resp.~separated).
+  If we do not specify, we mean the finest topology in which all presheaves $\mathscr{F}_{i}$ are sheaves.
+  \begin{proof}
+    A straightforward check shows that axioms \ref{t:1} and \ref{t:3} are satisfied.
+    % TODO: add details
+    For axiom \ref{t:2}, see \cite[Exposé II, Proposition 2.2]{sga4}.
+    % TODO: include proof
+  \end{proof}
+\end{defnlm}
+
+\begin{rem}
+  Note the contrast with the topology generated by a collection of morphims:~the topology generated by a collection of presheaves is the \textit{finest} topology for which all presheaves in the collection are sheaves, whereas the topology generated by a collection of morphisms is the \textit{coarsest} topology containig all morphisms, cf.~\Cref{defn:generated}.
+\end{rem}
+
+We want to compare the notion of sheaf given by a pretopology on $\mathbf{C}$ with the notion of sheaf given by the associated topology on $\mathbf{C}$.
+The associated topology was the topology generated by the moprhisms appearing in coverings of $\operatorname{Cov}(\mathbf{C})$, and it is also the topology generated by the collection of sieves generated by the open coverings of $\operatorname{Cov}(\mathbf{C})$.
+This motivates the following:
+
+\begin{lm}\label{lm:generated}
+  Let $\mathbf{C}$ be a category and for each object $X$ of $\mathbf{C}$ let $K(X)$ be a set of sieves on $X$.
+  Suppose that this collection of sieves $K$ is stable under pull back, i.e., suppose that \ref{t:1} holds for this collection of sieves.
+  Let $\mathscr{F}$ be a presheaf on $\mathbf{C}$.
+  Then $\mathscr{F}$ is a sheaf (resp.~separated) for the topology generated by $K$ if and only if for every object $X$ in $\mathbf{C}$ and every sieve $R \in K(X)$ the induced map
+  \[ \operatorname{Hom}(X,\mathscr{F}) \to \operatorname{Hom}(R,\mathscr{F}) \]
+  is bijective (resp.~injective).
+  \begin{proof}
+    Let $J_{K}$ be the topology generated by this collection of sieves and let $J_{\mathscr{F}}$ be the topology generated by $\mathscr{F}$.
+    So we deal with the assertion involving sheaves and bijections; the other assertion is proven similarly.
+
+    Suppose that $\mathscr{F}$ is a sheaf for the topology $J_{K}$.
+    By definition of $J_{K}$, for all objects $X$ of $\mathbf{C}$ we have $K(X) \subseteq J_{K}(X)$.
+    So the claim follows.
+
+    Conversely, suppose that for all objects $X$ of $\mathbf{C}$ and all $R \in K(X)$ the induced map
+    \[ \operatorname{Hom}(X,\mathscr{F}) \to \operatorname{Hom}(R,\mathscr{F}) \]
+    is bijective.
+    Let us check that $J_{K} \subseteq J_{\mathscr{F}}$.
+    Let $R \in K(X)$ and let $f \colon Y \to X$ be a morphism in $\mathbf{C}$.
+    By \Cref{defnlm:generatedtopology} we need to check that the pull back sieve $R \times_{X} Y$ induces a bijection
+    \[ \operatorname{Hom}(Y,\mathscr{F}) \to \operatorname{Hom}(R \times_{X} Y, \mathscr{F}). \]
+    But by assumption the collection of sieves $K$ satisfies \ref{t:1}, so $R \times_{X} Y \in K(Y)$ and therefore the previous map is indeed a bijection.
+    This shows that $J_{K} \subseteq J_{\mathscr{F}}$.
+    Since $\mathscr{F}$ is a sheaf for the topology $J_{\mathscr{F}}$, it is also a sheaf for the coarser topology $J_{K}$.
+  \end{proof}
+\end{lm}
+
+\begin{cor}\label{cor:sheaves}
+  Let $\mathbf{C}$ be a category endowed with a pretopology $\operatorname{Cov}(\mathbf{C})$ and let $J$ be the associated topology.
+  Then a presheaf $\mathscr{F}$ on $\mathbf{C}$ is a sheaf with respect to the pretopology $\operatorname{Cov}(\mathbf{C})$ if and only if it is a sheaf with respect to the topology $J$.
+  \begin{proof}
+    We apply \Cref{lm:generated} to the collection of $K$ of sieves generated by morphisms appearing in a covering of $\operatorname{Cov}(\mathbf{C})$.
+    Axiom \ref{pt:1} implies that this collection satisfies \ref{t:1}.
+    From this we deduce that $\mathscr{F}$ is a sheaf for the topology generated by $K$, i.e., for $J$, if and only if for every object $X$ in $\mathbf{C}$ and every sieve $R$ generated by a covering $\{ f_{i} \colon X_{i} \to X\}_{i \in I}$ in $\operatorname{Cov}(\mathbf{C})$ the induced map
+    \[ \operatorname{Hom}(X,\mathscr{F}) \to \operatorname{Hom}(R,\mathscr{F}) \]
+    is bijective.
+    We check that this condition is in turn equivalent to the sheaf for $\mathscr{F}$ with respect to the covering $\{ f_{i} \colon X_{i} \to X \}_{i \in I}$.
+    Suppose first that this map is bijective and consider the sheaf diagram
+    \begin{center}
+      \begin{tikzcd}
+        \mathscr{F}(X) \arrow{r}{\rho} & \prod_{i \in I} \mathscr{F}(X_{i}) \arrow[shift left=2]{r}{\sigma_{1}} \arrow[swap,shift right=2]{r}{\sigma_{2}} & \prod_{(i,j) \in I \times I} \mathscr{F}(X_{i} \times_{X} X_{j}).
+      \end{tikzcd}
+    \end{center}
+    Let $(s_{i})_{i \in I}$ be a compatible family of sections in $\prod_{i \in I} \mathscr{F}(X_{i})$, i.e., with our usual abuse of notation, a family of sections such that
+    \[ s_{i}|_{X_{i} \times_{X} X_{j}} = s_{j}|_{X_{i} \times_{X} X_{j}} \]
+    for all $(i,j) \in I \times I$.
+    We want to find a unique section $s \in \mathscr{F}(X)$ restricting to $s_{i}$ on each $X_{i}$.
+    By Yoneda, it suffices to find a unique morphism $X \to \mathscr{F}$, and by the sheaf condition for the $J$ topology it suffices in turn to find a unique morphism $\varphi \colon R \to \mathscr{F}$.
+    Let us construct such a morphism.
+    Let $T$ be an object of $\mathbf{C}$ and let $(\alpha \colon T \to X) \in R(T)$.
+    By \Cref{defnlm:generated}, this means that there exists $i \in I$ and there exists $f^{i} \colon T \to X_{i}$ such that $\alpha = f_{i} \circ f^{i}$.
+    We set $\varphi(\alpha) := \mathscr{F}(f^{i})(s_{i})$.
+    The image $\varphi(\alpha)$ being well-defined follows from the condition that $s_{i}|_{X_{i} \times_{X} X_{j}} = s_{j}|_{X_{i} \times_{X} X_{j}}$ for all $(i, j) \in I \times I$.
+    % TODO: finish details
+    The missing details are left to the reader.
+
+    Conversely, suppose that the above sheaf diagram is exact and let $\varphi \colon R \to \mathscr{F}$.
+    We want to find a unique section $s \in \mathscr{F}(X)$ whose image (again using Yoneda) in $\operatorname{Hom}(R,\mathscr{F})$ is $\varphi$.
+    For each $i \in I$ we define $s_{i} := \varphi(f_{i}) \in \mathscr{F}(X_{i})$.
+    This gives a compatible family of sections from which we can obtain the desired $s$.
+    % TODO: finish details
+    The missing details are again left to the reader.
+
+  \end{proof}
+\end{cor}
+
+\begin{cor}\label{cor:correspondence}
+  Let $\mathbf{C}$ be a category.
+  Then there is a order-reversing correspondence between topologies on $\mathbf{C}$ and full subcategories of $\mathbf{PSh}(\mathbf{C})$ which are categories of sheaves for some topology on $\mathbf{C}$, given by
+  \[ K \mapsto \mathbf{Sh}(\mathbf{C},K) \]
+  and
+  \[ \mathbf{Sh}(\mathbf{C},K) \mapsto J_{\mathbf{Sh}(\mathbf{C},K)}. \]
+  \begin{proof}
+    If $K \subseteq K'$, then $\mathbf{Sh}(\mathbf{C},K') \subseteq \mathbf{Sh}(\mathbf{C},K)$.
+    Indeed, we need to check less conditions to see that a presheaf $\mathscr{F}$ is a sheaf with respect to $K$than with respect to $K'$, because ``$K'$ has more open covers''.
+    Hence the order-reversing part of the statement.
+
+    It remains to show injectivity of $K \mapsto \mathbf{Sh}(\mathbf{C},K)$, for which it suffices to show that $K = J_{\mathbf{Sh}(\mathbf{C},K)}$.
+    The inclusion $K \subseteq J_{\mathbf{Sh}(\mathbf{C},K)}$ holds because the right hand side is the finest topology on which all presheaves which are sheaves with respect to $K$ are sheaves.
+
+    {\color{red} What about the other inclusion? \cite{stacks-project} uses a bit more machinery here and I didn't find the statement in \cite{sga4}}
+  \end{proof}
+\end{cor}
+
+This correspondence between topologies and categories of sheaves suggests that we can producte a canonical topology on any category $\mathbf{C}$ starting from a canonical collection of presheaves.
+This leads to the following:
+
+\begin{defn}[Canonical topology]
+  Let $\mathbf{C}$ be a category.
+  The \textit{canonical topology} $J_{c}$ on $\mathbf{C}$ is the finest topology on which all representable presheaves are sheaves.
+  A topology $J$ on $\mathbf{C}$ is called \textit{subcanonical} if $J \subseteq J_{c}$.
+\end{defn}
+
+Therefore a topology $J$ on $\mathbf{C}$ is subcanonical if and only if all representable presheaves are sheaves.
+This is the case with most topologies that one encounters in practice.
+Non subcanonical topologies include the discrete topology in non trivial categories or Voevodsky's $h$-toplogy on the category of schemes over a base scheme \cite[\href{https://stacks.math.columbia.edu/tag/0EV1}{Tag 0EV1}]{stacks-project}.
+See also \cite{hj14}.
 
 \printbibliography
 \vfill
