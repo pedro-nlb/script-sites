@@ -17,7 +17,7 @@
 \setcounter{biburlnumpenalty}{7000}
 \setcounter{biburllcpenalty}{7000}
 \setcounter{biburlucpenalty}{8000}
-\addbibresource{main.bib}
+\addbibresource{refs.bib}
 \usepackage{hyperref}
 \urlstyle{same}
 \usepackage[noabbrev]{cleveref}
@@ -714,7 +714,7 @@ We will refer to this as the \textit{sheaf condition} with respect to the cover 
 This already hints at the main motivation point for this talk:~different pretopologies may give rise to the same notion of sheaf on a category.
 A bit like when one defines a notion of smooth function on a topological manifold; different smoothly compatible atlases may give rise to the same notion of smooth function.
 A way to solve this is to define a smooth structure on a topological manifold as a maximal smoothly compatible atlas.
-This solution has a similar flavour to the one that we will adopt in our situation; we will come back to this later on.
+This solution has a similar flavor to the one that we will adopt in our situation; we will come back to this later on.
 
 \begin{exmp}\label{exmp:indiscretetopology}
   Let $X$ be a set and consider the \textit{indiscrete topology} $\{ \varnothing, X \}$ on $X$.
@@ -827,7 +827,7 @@ In other words, a sieve on $X$ consists on a collection of subsets $S(T) \subset
 \begin{rem}
   It is common (at least in algebraic geometry) to denote
   \[ X(T) = h_{X}(T) = \operatorname{Hom}(T,X). \]
-  These are called the $T$-valued points of $X$ when $T$ and $X$ are schemes, because if we take for example the scheme $X = \operatorname{Spec}(\mathbb{Z}[x,y]/(x^{2} + y^{2}))$ and we consider a field extension $\mathbb{Q} \subseteq K \subseteq \mathbb{C}$, then the $K$-valued points of $X$ give us the $K$-valued solutions of the defining equation of $X$:
+  These are called the $T$-valued points of $X$ when $T$ and $X$ are schemes, because if we take for example the scheme $X = \operatorname{Spec}(\mathbb{Z}[x,y]/(x^{2} + y^{2}))$ and we consider a field extension $\mathbb{Q} \subseteq K$, then the $K$-valued points of $X$ give us the $K$-valued solutions of the defining equation of $X$:
   \[ X(K) := X(\operatorname{Spec}(K)) = \{ (a,b) \in K^{2} \mid a^{2} + b^{2} = 0\}. \]
   This notation fits nicely into our usual abuse of notation and terminology in which we do not distinguish between $X$ and $h_{X}$ too much.
 \end{rem}
@@ -847,7 +847,7 @@ Some observations:
 
 We will need the following two constructions with sieves:
 
-\begin{defnlm}\label{defnlm:generated}
+\begin{defnlm}[{cf.~\cite[\href{https://stacks.math.columbia.edu/tag/00Z1}{Tag 00Z1}]{stacks-project}}]\label{defnlm:generated}
   Let $\mathbf{C}$ be a category and let $\{ f_{i} \colon X_{i} \to X \}_{i \in I}$ be a collection of morphisms in $\mathbf{C}$.
   Then there exists a unique sieve $S$ on $X$, called the \textit{sieve generated} by the collection of morphisms $\{ f_{i} \colon X_{i} \to X \}_{i \in I}$, which is the smallest sieve on $X$ such that for every $i \in I$, the morphism $f_{i} \colon X_{i} \to X$ is in $S(X_{i})$.
   \begin{proof}
@@ -861,7 +861,7 @@ We will need the following two constructions with sieves:
   \end{proof}
 \end{defnlm}
 
-\begin{defnlm}\label{defnlm:pullback}
+\begin{defnlm}[{cf.~\cite[\href{https://stacks.math.columbia.edu/tag/00Z2}{Tag 00Z2}]{stacks-project}}]\label{defnlm:pullback}
   Let $\mathbf{C}$ be a category, let $f \colon Y \to X$  be a morphism in $\mathbf{C}$ and let $S$ be a sieve on $X$.
   We define the \textit{pull back} of $S$ by $f$ to be the sieve $S \times_{X} Y$ on $Y$ defined by the rule
   \[ (\alpha \colon T \to Y) \in (S\times_{X} Y)(T) : \Leftrightarrow (f \circ \alpha \colon T \to X) \in S(T). \]
@@ -869,7 +869,7 @@ We will need the following two constructions with sieves:
     We check again that \Cref{eqn:sieve} holds.
     Let $\beta \colon T \to T'$ be a morphism in $\mathbf{C}$ and let $\alpha \in (S\times_{X} Y)(T')$.
     We want to show that $\alpha \circ \beta \in (S \times_{X} Y)(T)$, i.e., we want to show that $f \circ (\alpha \circ \beta) \in S(T)$.
-    This follows from $f \circ (\alpha \circ \beta) = (f \circ \alpha) \circ \beta$, $f \circ \alpha \in S(T)$ by definition of $S \times_{X} Y$ and from \Cref{eqn:sieve} and the assumption that $S$ is a sieve.
+    This follows from $f \circ (\alpha \circ \beta) = (f \circ \alpha) \circ \beta$, $f \circ \alpha \in S(T')$ by definition of $S \times_{X} Y$ and from \Cref{eqn:sieve} and the assumption that $S$ is a sieve.
   \end{proof}
 \end{defnlm}
 
@@ -894,13 +894,28 @@ We will need the following two constructions with sieves:
   Let $T$ be an object in $\mathbf{C}$ and let $\alpha \colon T \to Y$ be any morphism in $\mathbf{C}$.
   We want to show that $\alpha \in (S \times_{X} Y)(T)$, i.e., we want to show that $f \circ \alpha \in S(T)$.
   This follows from $f \in S(Y)$ and \Cref{eqn:sieve}.
+  Another option is to argue using \Cref{exmp:maximalsieve} and noting that $f \in S(Y)$ implies that $\operatorname{id}_{Y} \in (S \times_{X} Y)(Y)$ by definition.
 \end{exmp}
 
 \begin{rem}\label{rem:pullback}
   Let $\mathbf{C}$ be a category and let $\{ f_{i} \colon X_{i} \to X \}_{i \in I}$ be a collection of morphisms.
   Let $S$ be the sieve on $X$ generated by this collection of morphisms and let $f \colon Y \to X$ be any morphism in $\mathbf{C}$.
   Then the pull back sieve $S \times_{X} Y$ is the sieve generated by the pulled back collection of morphisms $\{ f^{*}(f_{i}) \colon Y \times_{X} X_{i} \to Y \}_{i \in I}$.
-  {\color{red} Add proof}
+  Indeed, let $T$ be an object in $\mathbf{C}$.
+  The claim is then that $t \in (S \times_{X} Y)(T)$ if and only if there exists $i \in I$ such that there exists $g \colon T \to X_{i} \times_{X} Y$ with $t = f^{*}(f_{i}) \circ g$.
+  By definition, $t \in (S \times_{X} Y)(T)$ if and only if $f \circ t \in S(T)$.
+  Since $S$ is the sieve generated by the collection $\{f_{i} \colon X_{i} \to X \}_{i \in I}$, we have in turn that $f \circ t \in S(T)$ if and only if there exists $i \in I$ such that there exists $h \colon T \to X_{i}$ such that $f \circ t = f_{i} \circ h$.
+  Suppose first that this is the case.
+  Then we can take $g \colon T \to X_{i} \times_{X} Y$ to be the morphism given by the universal property of the fiber product as follows:
+  \begin{center}
+    \begin{tikzcd}
+      T \arrow[bend left=30]{drr}{t} \arrow[bend right=30]{ddr}{h} \arrow[dashed]{dr}{\exists ! g} & & \\
+      & X_{i} \times_{X} Y \arrow[swap]{d}{p} \arrow[swap]{r}{f^{*}(f_{i})} & Y \arrow{d}{f} \\
+      & X_{i} \arrow[swap]{r}{f_{i}} & X
+    \end{tikzcd}
+  \end{center}
+  Conversely, suppose there exists a morphism $g \colon T \to X_{i} \times_{X} Y$ such that $t = f^{*}(f_{i}) \circ g$.
+  Then we can take $h = p \circ g$ as in the diagram above.
 \end{rem}
 
 \section{Grothendieck topologies}
@@ -993,6 +1008,8 @@ The intersection of a family of topologies is the infimum of that collection of 
 
 \begin{defn}[Topology generated by a collection of morphisms]\label{defn:generated}
   Given a collection $\{ f_{i} \}_{i \in I}$ of morphisms in $\mathbf{C}$, we can now define the \textit{topology generated} by this collection of morphisms as the coarsest topology $J$ on $\mathbf{C}$ containing all of them, i.e., for every $i \in I$, if $f_{i} \colon Y_{i} \to X_{i}$, then there exists a covering sieve $S \in J(X_{i})$ such that $f_{i} \in S(Y_{i})$.
+
+  {\color{red} TODO 2: fix this definition and the following paragraph!}
 \end{defn}
 
 In particular, we may define the topology generated by a collection $\{ S_{i} \}_{i \in I}$ of sieves in $\mathbf{C}$ as the topology generated by the collection of morphisms $\cup_{X \in \operatorname{Ob}(\mathbf{C})} \cup_{i \in I} S_{i}(X)$.
@@ -1047,9 +1064,9 @@ A finer example:
     Since $S \in J'(X)$, there exists a covering family $\{ f_{i} \colon X_{i} \to X \}_{i \in I}$ such that $S$ contains the sieve $S_{0}$ generated by this covering.
     Let us check that $S \times_{X} Y$ contains the sieve generated by the family of morphisms $\{ f^{*}(f_{i}) \colon Y \times_{X} X_{i} \to Y \}_{i \in I}$.
     By \Cref{rem:pullback}
-    {\color{red} Finish proof}
+
+    {\color{red} TODO 3: Finish proof!}
   \end{proof}
-  % TODO: include this proof
 \end{exmp}
 
 \begin{rem}\label{rem:cofinal}
@@ -1097,9 +1114,12 @@ Our main goal for the rest of the talk is to check that a pretopology and the as
   If we do not specify, we mean the finest topology in which all presheaves $\mathscr{F}_{i}$ are sheaves.
   \begin{proof}
     A straightforward check shows that axioms \ref{t:1} and \ref{t:3} are satisfied.
-    % TODO: add details
+
+    {\color{red} TODO 4: add details!}
+
     For axiom \ref{t:2}, see \cite[Exposé II, Proposition 2.2]{sga4}.
-    % TODO: include proof
+
+    {\color{red} TODO 5: include proof!}
   \end{proof}
 \end{defnlm}
 
@@ -1165,15 +1185,15 @@ This motivates the following:
     By \Cref{defnlm:generated}, this means that there exists $i \in I$ and there exists $f^{i} \colon T \to X_{i}$ such that $\alpha = f_{i} \circ f^{i}$.
     We set $\varphi(\alpha) := \mathscr{F}(f^{i})(s_{i})$.
     The image $\varphi(\alpha)$ being well-defined follows from the condition that $s_{i}|_{X_{i} \times_{X} X_{j}} = s_{j}|_{X_{i} \times_{X} X_{j}}$ for all $(i, j) \in I \times I$.
-    % TODO: finish details
-    The missing details are left to the reader.
+
+    {\color{red} TODO 6: finish details!}
 
     Conversely, suppose that the above sheaf diagram is exact and let $\varphi \colon R \to \mathscr{F}$.
     We want to find a unique section $s \in \mathscr{F}(X)$ whose image (again using Yoneda) in $\operatorname{Hom}(R,\mathscr{F})$ is $\varphi$.
     For each $i \in I$ we define $s_{i} := \varphi(f_{i}) \in \mathscr{F}(X_{i})$.
     This gives a compatible family of sections from which we can obtain the desired $s$.
-    % TODO: finish details
-    The missing details are again left to the reader.
+
+    {\color{red} TODO 7: finish details!}
 
   \end{proof}
 \end{cor}
@@ -1192,7 +1212,8 @@ This motivates the following:
     It remains to show injectivity of $K \mapsto \mathbf{Sh}(\mathbf{C},K)$, for which it suffices to show that $K = J_{\mathbf{Sh}(\mathbf{C},K)}$.
     The inclusion $K \subseteq J_{\mathbf{Sh}(\mathbf{C},K)}$ holds because the right hand side is the finest topology on which all presheaves which are sheaves with respect to $K$ are sheaves.
     See \cite[\href{https://stacks.math.columbia.edu/tag/00ZP}{Tag 00ZP}]{stacks-project} for the other inclusion.
-    % TODO: add proof?
+
+    {\color{red} TODO 8: add proof?}
   \end{proof}
 \end{cor}
 
