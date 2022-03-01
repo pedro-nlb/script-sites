@@ -969,6 +969,7 @@ Before seeing a couple of examples, we make the following observation:
     Then we have $(S \cap S') \times_{X} Y = S' \times_{X} Y$, because
     \[ (S \cap S') \times_{X} Y = S \times_{X} S' \times_{X} Y = S \times_{X} Y \times_{X} S' = Y \times_{X} S' = S' \times_{X} Y, \]
     where in the second to last equality we have used \Cref{exmp:pullbacksieve}.
+    One can also check the equality $(S \cap S') \times_{X} Y = S' \times_{X} Y$ by hand, unravelling the definitions and using \Cref{eqn:sieve}.
     But \ref{t:1} tells us that $S \times_{X} Y$ is in $J(Y)$, so by \ref{t:2} the sieve $S \cap S'$ is again in $J(X)$.
 
     Let us show $(2)$ now.
@@ -982,6 +983,18 @@ Before seeing a couple of examples, we make the following observation:
     Since there is at most one morphism between two covering sieves in the partially ordered set $J(X)$, assertion $(1)$ in this lemma already ensures that $J(X)$ is cofiltered.
   \end{proof}
 \end{lm}
+
+\begin{rem}\label{rem:t2}
+  The proof of \Cref{lm:cofiltered} shows that in order to check that a set of sieves on a category $\mathbf{C}$ satisfies the axiom \ref{t:2} it suffices to check that it satisfies the following two conditions:
+  \begin{enumerate}[label=(T2)$_{\arabic*}$]
+    \item Axiom \ref{t:2} holds whenever $S' \subseteq S$ is a subfunctor.\label{t:2-1}
+    \item If $S$ and $S'$ are sieves on $X$, $S \in J(X)$ and $S \subseteq S'$, then $S' \in J(X)$.\label{t:2-2}
+  \end{enumerate}
+  Indeed, suppose that \ref{t:2-1} and \ref{t:2-2} are satisfied and let $S$ and $S'$ be sieves on $X$ as in \ref{t:2}.
+  We have seen in the proof of \Cref{lm:cofiltered} that $(S' \cap S) \times_{X} Y = S' \times_{X} Y$ as a consequence of $f \in S(Y)$.
+  So the sieve $S' \cap S \subseteq S$ satisfies the assumptions in \ref{t:2-1} and is therefore in $J(X)$.
+  It follows now from \ref{t:2-2} that $S' \in J(X)$ as well.
+\end{rem}
 
 Knowing that $J(X)$ is cofiltered makes computing limits indexed over $J(X)$ and computing colimits indexed over $J(X)^{\mathrm{op}}$ easier, cf.~\cite[\href{https://stacks.math.columbia.edu/tag/04AX}{Tag 04AX}]{stacks-project}.
 
@@ -1141,9 +1154,9 @@ Our main goal for the rest of the talk is to check that a pretopology and the as
     Axiom \ref{t:3} follows immediately from the equality $X \times_{X} Y = Y$.
     So it remains only to show axiom \ref{t:2}.
 
-    For axiom \ref{t:2}, see \cite[Exposé II, Proposition 2.2]{sga4}.
+    We have seen in \Cref{rem:t2} that it suffices to show \ref{t:2-1} and \ref{t:2-2}.
 
-    {\color{red} TODO 5: include proof!}
+    {\color{red} TODO 5: finish the proof!}
   \end{proof}
 \end{defnlm}
 
