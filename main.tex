@@ -1153,10 +1153,49 @@ Our main goal for the rest of the talk is to check that a pretopology and the as
     Hence the claim follows.
     Axiom \ref{t:3} follows immediately from the equality $X \times_{X} Y = Y$.
     So it remains only to show axiom \ref{t:2}.
+    For this we follow the proof in \cite[Exposé II, Proposition 2.2]{sga4}.
 
-    We have seen in \Cref{rem:t2} that it suffices to show \ref{t:2-1} and \ref{t:2-2}.
+    We have seen in \Cref{rem:t2} that it suffices to show the following two conditions:
+    \begin{enumerate}[label=(T2)$_{\arabic*}$]
+      \item If $R' \subseteq R$ are sieves on $X$ with $R \in J_{\mathbf{F}}(X)$ and if for all objects $Y$ of $\mathbf{C}$ and all $f \in R(Y)$ we have $R' \times_{X} Y \in J_{\mathbf{F}}(Y)$, then $R' \in J_{\mathbf{F}}(X)$.
+      \item If $R' \subseteq R$ are sieves on $X$ with $R' \in J_{\mathbf{F}}(X)$, then $R \in J_{\mathbf{F}}(X)$.
+    \end{enumerate}
 
-    {\color{red} TODO 5: finish the proof!}
+    Let us check first \ref{t:2-1}.
+    Write $R = \operatorname{colim}_{(Z \to R)} Z$ as a colimit of representable presheaves $Z$ as in \cite[Exposé I, Proposition 3.4]{sga4}.
+    Since $R' \subseteq R$, we have $R' \cong R' \times_{X} R$ in $\mathbf{PSh}(\mathbf{C})$.
+    By \cite[Exposé I, Corollaire 3.3]{sga4} we can then write
+    \[ R' \cong R' \times_{X} (\operatorname{colim}_{(Z \to R)}Z) \cong \operatorname{colim}_{(Z \to R)} (R' \times_{X} Z) \]
+    in $\mathbf{PSh}(\mathbf{C})$.
+    Each $Z \to R$ corresponds to a morphism $g \in R(Z)$, so by assumption we have $R' \times_{X} Z \in J_{\mathbf{F}}(Z)$.
+    Therefore:
+    \begin{align*}
+      \operatorname{Hom}(R,\mathscr{F}_{i}) & \cong \operatorname{lim}_{(Z \to R)} \operatorname{Hom}(Z,F_{i}) \\
+      & \cong \operatorname{lim}_{(Z \to R)} \operatorname{Hom}(R' \times_{X} Z, \mathscr{F}_{i}) \\
+      & \cong \operatorname{Hom}(\operatorname{colim}_{(Z \to R)} R' \times_{X} Z, \mathscr{F}_{i}) \\
+      & \cong \operatorname{Hom}(R',\mathscr{F}_{i}).
+    \end{align*}
+    Now, since $R \in J_{\mathbf{F}}(X)$, we have
+    \[ \operatorname{Hom}(X,\mathscr{F}_{i}) \cong \operatorname{Hom}(R,\mathscr{F}_{i}). \]
+    Hence
+    \[ \operatorname{Hom}(X,\mathscr{F}_{i}) \cong \operatorname{Hom}(R', \mathscr{F}_{i}). \]
+    We check next that the assumptions in \ref{t:2-1} are stable under pull back along an arbitrary morphism $Y \to X$ in $\mathbf{C}$.
+    We still have $R' \times_{X} Y \subseteq R \times_{X} Y$, and since we have already seen that \ref{t:1} is satisfied, we also have $R \times_{X} Y \in J_{\mathbf{F}}(Y)$.
+    Let $Z$ be another object in $\mathbf{C}$ and let $g \in (R \times_{X} Y)(Z)$.
+    Then $(R' \times_{X} Y) \times_{Y} Z = R' \times_{X} Z \in J_{\mathbf{F}}(Z)$.
+    So the assumptions in \ref{t:2-1} are indeed stable under pull back.
+    It follows that
+    \[ \operatorname{Hom}(Y,\mathscr{F}_{i}) \cong \operatorname{Hom}(R' \times_{X} Y,\mathscr{F}_{i}) \]
+    for all $Y \to X$, i.e., $R' \in J_{\mathbf{F}}(X)$.
+
+    Let us show \ref{t:2-2} now.
+    Write again
+    \[ R = \operatorname{colim}_{(Z \to R)} Z \text{ and } R' = \operatorname{colim}_{(Z \to R)} (R' \times_{X} Z). \]
+    Since $R' \in J_{\mathbf{F}}(X)$ and \ref{t:1} is already known to hold for $J_{\mathbf{F}}$, we have $R' \times_{X} Z \in J_{\mathbf{F}}(Z)$ for each $Z \to R$.
+    From the same isomorphisms as above and the assumption that $R' \in J_{\mathbf{F}}(X)$ it follows that
+    \[ \operatorname{Hom}(X,\mathscr{F}_{i}) \cong \operatorname{Hom}(R,\mathscr{F}_{i}). \]
+    The assumptions in \ref{t:2-2} are also stable under pull back along arbitrary morphisms $Y \to X$ in $\mathbf{C}$, because inclusions are preserved by pull back and we already know that \ref{t:1} holds for $J_{\mathbf{F}}$.
+    Thus we conclude that $R \in J_{\mathbf{F}}(X)$ as we did for $R'$ before.
   \end{proof}
 \end{defnlm}
 
