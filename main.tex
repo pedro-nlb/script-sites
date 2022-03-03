@@ -1263,7 +1263,24 @@ This motivates the following:
     We set $\varphi(\alpha) := \mathscr{F}(f^{i})(s_{i})$.
     The image $\varphi(\alpha)$ being well-defined follows from the condition that $s_{i}|_{X_{i} \times_{X} X_{j}} = s_{j}|_{X_{i} \times_{X} X_{j}}$ for all $(i, j) \in I \times I$.
     Indeed, suppose $j \in I$ is another index such that there exists $f^{j} \colon T \to X_{j}$ such that $\alpha = f_{j} \circ f^{j}$.
-
+    The universal property of the fiber product yields then a morphism $t \colon T \to X_{i} \times_{X} X_{j}$ fitting into a commutative diagram as follows:
+    \begin{center}
+      \begin{tikzcd}
+        T \arrow{dr}{t} \arrow[bend left=45]{drr}{f^{j}} \arrow[bend right=45, swap]{ddr}{f^{i}} & & \\
+        & X_{i} \times_{X} X_{j} \arrow[swap]{d}{p^{(i,j)}_{1}} \arrow{r}{p^{(i,j)}_{2}} & X_{j} \arrow{d}{f_{j}} \\
+        & X_{i} \arrow{r}{f_{i}} & X
+      \end{tikzcd}
+    \end{center}
+    The condition that $s_{i}|_{X_{i} \times_{X} X_{j}} = s_{j}|_{X_{i} \times_{X} X_{j}}$ means then precisely that
+    \[ \mathscr{F}(p_{1}^{(i,j)})(s_{i}) = \mathscr{F}(p_{2}^{(i,j)})(s_{j}). \]
+    Combining this with commutativity of the diagram and functoriality of $\mathscr{F}$ we deduce that
+    \begin{align*}
+      \mathscr{F}(f^{i})(s_{i}) & = \mathscr{F}(t)(\mathscr{F}(p_{1}^{(i,j)})(s_{i})) \\
+      & = \mathscr{F}(t)(\mathscr{F}(p_{2}^{(i,j)})(s_{j})) \\
+      & = \mathscr{F}(f^{j})(s_{j}).
+    \end{align*}
+    Therefore we have a well-defined $\varphi \colon R \to \mathscr{F}$.
+    
 
     {\color{red} TODO 6: finish details!}
 
