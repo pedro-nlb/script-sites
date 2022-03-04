@@ -1260,8 +1260,8 @@ This motivates the following:
     Let us construct such a morphism.
     Let $T$ be an object of $\mathbf{C}$ and let $(\alpha \colon T \to X) \in R(T)$.
     By \Cref{defnlm:generated}, this means that there exists $i \in I$ and there exists $f^{i} \colon T \to X_{i}$ such that $\alpha = f_{i} \circ f^{i}$.
-    We set $\varphi(\alpha) := \mathscr{F}(f^{i})(s_{i})$.
-    The image $\varphi(\alpha)$ being well-defined follows from the condition that $s_{i}|_{X_{i} \times_{X} X_{j}} = s_{j}|_{X_{i} \times_{X} X_{j}}$ for all $(i, j) \in I \times I$.
+    We set $\varphi_{T}(\alpha) := \mathscr{F}(f^{i})(s_{i})$.
+    The image $\varphi_{T}(\alpha)$ being well-defined follows from the condition that $s_{i}|_{X_{i} \times_{X} X_{j}} = s_{j}|_{X_{i} \times_{X} X_{j}}$ for all $(i, j) \in I \times I$.
     Indeed, suppose $j \in I$ is another index such that there exists $f^{j} \colon T \to X_{j}$ such that $\alpha = f_{j} \circ f^{j}$.
     The universal property of the fiber product yields then a morphism $t \colon T \to X_{i} \times_{X} X_{j}$ fitting into a commutative diagram as follows:
     \begin{center}
@@ -1279,10 +1279,58 @@ This motivates the following:
       & = \mathscr{F}(t)(\mathscr{F}(p_{2}^{(i,j)})(s_{j})) \\
       & = \mathscr{F}(f^{j})(s_{j}).
     \end{align*}
-    Therefore we have a well-defined $\varphi \colon R \to \mathscr{F}$.
-    
-
-    {\color{red} TODO 6: finish details!}
+    Therefore we have a well-defined function $\varphi_{T} \colon R(T) \to \mathscr{F}(T)$.
+    We check that these are the components of a natural transformation $\varphi \colon R \to \mathscr{F}$.
+    Let $g \colon T' \to T$ be a morphism in $\mathbf{C}$.
+    We want to show that the diagram
+    \begin{center}
+      \begin{tikzcd}
+        R(T) \arrow{r}{\varphi_{T}} \arrow[swap]{d}{(-) \circ g} & \mathscr{F}(T) \arrow{d}{\mathscr{F}(g)} \\
+        R(T') \arrow[swap]{r}{\varphi_{T'}} & \mathscr{F}(T')
+      \end{tikzcd}
+    \end{center}
+    commutes.
+    So let $\alpha \in R(T)$ as above and let $i \in I$ and $f^{i} \colon T \to X_{i}$ such that $\alpha = f_{i} \circ f^{i}$.
+    Then we have
+    \[ \mathscr{F}(g)(\varphi_{T}(\alpha)) = \mathscr{F}(g)(\mathscr{F}(f^{i})(s_{i})) = \mathscr{F}(f^{i}\circ g)(s_{i}). \]
+    The morphism $f^{i} \circ g \colon T' \to X_{i}$ is such that $\alpha \circ g= f_{i} \circ (f^{i} \circ g)$.
+    Therefore we also have
+    \[ \varphi_{T'}(\alpha \circ g) = \mathscr{F}(f^{i} \circ g)(s_{i}), \]
+    which shows that the diagram commutes.
+    So we have a well-defined natural transformation $\varphi \colon R \to \mathscr{F}$.
+    The bijection $\operatorname{Hom}(X,\mathscr{F}) \to \operatorname{Hom}(R,\mathscr{F})$ is induced by the inclusion $i \colon R \to X$, whose component at an object $T$ of $\mathbf{C}$ is just the set-theoretical inclusion $i_{T} \colon R(T) \subseteq X(T)$.
+    The natural transformation $\varphi$ corresponds under this bijection to the natural transformation $\psi \colon X \to \mathscr{F}$ whose component at $T$ has the property that $\psi_{T} \circ i_{T} = \varphi_{T}$.
+    We then consider the section $s := \psi_{X}(\operatorname{id}_{X}) \in \mathscr{F}(X)$.
+    The first claim is that $\rho(s) = (s_{i})_{i \in I}$, i.e., that for every $i \in I$ we have $\mathscr{F}(f_{i})(s) = s_{i}$.
+    We apply the naturality of $\psi$ to the morphism $f_{i}$ to obtain a commutative diagram as follows:
+    \begin{center}
+      \begin{tikzcd}
+        X(X) \arrow{r}{\psi_{X}} \arrow[swap]{d}{(-) \circ f_{i}} & \mathscr{F}(X) \arrow{d}{\mathscr{F}(f_{i})} \\
+        X(X_{i}) \arrow{r}{\psi_{X_{i}}} & \mathscr{F}(X_{i})
+      \end{tikzcd}
+    \end{center}
+    The section $\mathscr{F}(f_{i})(s)$ is then equal to $\psi_{X_{i}}(\operatorname{id}_{X} \circ f_{i}) = \psi_{X_{i}}(f_{i})$.
+    Since $f_{i} \in R(X_{i})$ we also have $\psi_{X_{i}}(f_{i}) = \varphi_{X_{i}}(f_{i})$.
+    We have $f_{i} = f_{i} \circ \operatorname{id}_{X_{i}}$, so by construction we have $\varphi_{X_{i}}(f_{i}) = \mathscr{F}(\operatorname{id}_{X_{i}})(s_{i})$.
+    Since $\mathscr{F}$ is a functor, we finally deduce that $\mathscr{F}(\operatorname{id}_{X_{i}})(s_{i}) = \operatorname{id}_{\mathscr{F}(X_{i})}(s_{i}) = s_{i}$, showing that $\mathscr{F}(f_{i})(s) = s_{i}$ as we wanted.
+    The second claim is that any section $s' \in \mathscr{F}(X)$ with the property that $\mathscr{F}(f_{i})(s') = s_{i}$ for all $i \in I$ is equal to $s$.
+    Such a section $s' \in \mathscr{F}(X)$ corresponds under Yoneda to a natural transformation $\psi' \colon X \to \mathscr{F}$ such that $\psi'_{X}(\operatorname{id}_{X}) = s'$, and again by Yoneda it suffices to show that $\psi = \psi'$.
+    Since $(-) \circ i \colon \operatorname{Hom}(X,\mathscr{F}) \to \operatorname{Hom}(R,\mathscr{F})$ is a bijection, it suffices to show that $\psi' \circ i = \psi \circ i = \varphi$.
+    So let $(\alpha \colon T \to X) \in R(T)$.
+    We apply the naturality of $\psi'$ to $\alpha \colon T \to X$ to obtain a commutative diagram as follows:
+    \begin{center}
+      \begin{tikzcd}
+        X(X) \arrow{r}{\psi'_{X}} \arrow[swap]{d}{(-) \circ \alpha} & \mathscr{F}(X) \arrow{d}{\mathscr{F}(\alpha)} \\
+        X(T) \arrow{r}{\psi'_{T}} & \mathscr{F}(T)
+      \end{tikzcd}
+    \end{center}
+    We see that
+    \[ \psi'_{T}(\alpha) = (\psi'_{T} \circ i)(\alpha) = \mathscr{F}(\alpha)(s'). \]
+    By definition of $R$ there exists some $i \in I$ and some $f^{i} \colon T \to X_{i}$ such that $\alpha = f_{i} \circ f^{i}$.
+    Hence we deduce in turn that
+    \[ \psi'_{T}(\alpha) = \mathscr{F}(f^{i})(\mathscr{F}(f_{i})(s')) = \mathscr{F}(f^{i})(s_{i}) = \varphi_{T}(\alpha). \]
+    This shows that $\psi' \circ i = \varphi$, hence $s' = s$.
+    Therefore there exists a unique section $\mathscr{F}(s)$ such that $\rho(s) = (s_{i})_{i \in I}$ and the presheaf $\mathscr{F}$ is a sheaf in the sense of the pretopology.
 
     Conversely, suppose that the above sheaf diagram is exact and let $\varphi \colon R \to \mathscr{F}$.
     We want to find a unique section $s \in \mathscr{F}(X)$ whose image (again using Yoneda) in $\operatorname{Hom}(R,\mathscr{F})$ is $\varphi$.
