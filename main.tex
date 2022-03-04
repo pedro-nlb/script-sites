@@ -53,7 +53,7 @@
 \indent Ernst-Zermelo-Straße 1, 79104 Freiburg im Breisgau (Germany)}
 \email{\normalfont\href{mailto:pedro.nunez@math.uni-freiburg.de}{pedro.nunez@math.uni-freiburg.de}}
 \renewcommand*{\urladdrname}{\itshape Homepage}
-\urladdr{\normalfont\href{https://home.mathematik.uni-freiburg.de/nunez/}{https://home.mathematik.uni-freiburg.de/nunez}}
+\urladdr{\normalfont\href{https://home.mathematik.uni-freiburg.de/nunez/?l=en}{https://home.mathematik.uni-freiburg.de/nunez}}
 \thanks{The author gratefully acknowledges support by the DFG-Graduiertenkolleg GK1821 ``Cohomological Methods in Geometry'' at the University of Freiburg.}
 \date{21st December 2021}
 
@@ -83,6 +83,7 @@
 %\end{center}
 
 The main references for this talk are \cite{sga4} and \cite{stacks-project}.
+I would like to thank Nicola Nesa for pointing out a mistake in a previous version of these notes!
 
 \setcounter{section}{-1}
 
@@ -1333,12 +1334,42 @@ This motivates the following:
     Therefore there exists a unique section $\mathscr{F}(s)$ such that $\rho(s) = (s_{i})_{i \in I}$ and the presheaf $\mathscr{F}$ is a sheaf in the sense of the pretopology.
 
     Conversely, suppose that the above sheaf diagram is exact and let $\varphi \colon R \to \mathscr{F}$.
-    We want to find a unique section $s \in \mathscr{F}(X)$ whose image (again using Yoneda) in $\operatorname{Hom}(R,\mathscr{F})$ is $\varphi$.
-    For each $i \in I$ we define $s_{i} := \varphi(f_{i}) \in \mathscr{F}(X_{i})$.
-    This gives a compatible family of sections from which we can obtain the desired $s$.
-
-    {\color{red} TODO 7: finish details!}
-
+    We want to show that there exists a unique $\psi \colon X \to \mathscr{F}$ such that $\psi \circ i = \varphi$, where $i \colon R \to X$ denotes the inclusion.
+    For each $i \in I$ we have $f_{i} \in R(X_{i})$, so we may define $s_{i} := \varphi_{X_{i}}(f_{i}) \in \mathscr{F}(X_{i})$.
+    We want to check next that the family $(s_{i})_{i \in I}$ is a compatible family, so let $i, j \in I$.
+    We need to show that $\mathscr{F}(p_{1}^{(i,j)})(s_{i}) = \mathscr{F}(p_{2}^{(i,j)})(s_{j})$.
+    Applying naturality of $\varphi$ to the morphism $p_{1}^{(i,j)}$ yields a commutative diagram
+    \begin{center}
+      \begin{tikzcd}
+        R(X_{i}) \arrow{r}{\varphi_{X_{i}}} \arrow[swap]{d}{(-) \circ p_{1}^{(i,j)}} & \mathscr{F}(X_{i}) \arrow{d}{\mathscr{F}(p_{1}^{(i,j)})} \\
+        R(X_{i} \times_{X} X_{j}) \arrow{r}{\varphi_{X_{i} \times_{X} X_{j}}} & \mathscr{F}(X_{i} \times_{X} X_{j})
+      \end{tikzcd}
+    \end{center}
+    It follows from the commutativity of this diagram and from the commutativity of the corresponding naturality diagram for $p_{2}^{(i,j)}$ that
+    \[ \mathscr{F}(p_{1}^{(i,j)})(s_{i}) = \varphi_{X_{i} \times_{X} X_{j}}(f_{i} \circ p_{1}^{(i,j)}) = \varphi_{X_{i} \times_{X} X_{j}}(f_{j} \circ p_{2}^{(i,j)}) = \mathscr{F}(p_{2}^{(i,j)})(s_{j}), \]
+    showing that $(s_{i})_{i \in I}$ is indeed a compatible family.
+    Therefore there exists a unique $s \in \mathscr{F}(X)$ such that $\mathscr{F}(f_{i})(s) = s_{i}$ for each $i \in I$.
+    We claim that the natural transformation $\psi \colon X \to \mathscr{F}$ corresponding to $s$ under Yoneda satisfies $\psi \circ i = \varphi$.
+    To show this, let $(\alpha \colon T \to X) \in R(T)$ and let $i \in I$ and $f^{i} \colon T \to X_{i}$ such that $\alpha = f_{i} \circ f^{i}$.
+    We need to use the information that we have on $\psi$, namely, that $\psi_{X}(\operatorname{id}_{X}) = s$.
+    So we consider the naturality diagram for $\psi$ with respect to $\alpha$:
+    \begin{center}
+      \begin{tikzcd}
+        X(X) \arrow{r}{\psi_{X}} \arrow[swap]{d}{(-) \circ \alpha} & \mathscr{F}(X) \arrow{d}{\mathscr{F}(\alpha)} \\
+        X(T) \arrow{r}{\psi_{T}} & \mathscr{F}(T)
+      \end{tikzcd}
+    \end{center}
+    This diagram shows that
+    \[ \psi_{T}(\alpha) = \mathscr{F}(\alpha)(s) = \mathscr{F}(f^{i})(\mathscr{F}(f_{i})(s)) = \mathscr{F}(f^{i})(s_{i}) = \mathscr{F}(f^{i})(\varphi_{X_{i}}(f_{i})). \]
+    From the naturality of $\varphi$ with respect to $f^{i}$ we deduce now that
+    \[ \mathscr{F}(f^{i})(\varphi_{X_{i}}(f_{i})) = \varphi_{T}(f_{i} \circ f^{i}) = \varphi_{T}(\alpha), \]
+    hence $\psi \circ i = \varphi$ as we wanted to show.
+    Suppose that $\psi' \colon X \to \mathscr{F}$ is another natural transformation with the property that $\psi' \circ i = \varphi$.
+    To show that $\psi = \psi'$ it suffices to show that $\psi'_{X}(\operatorname{id}_{X}) = s$.
+    In order to show this it suffices in turn to show that for each $i \in I$ we have $\mathscr{F}(f_{i})(\psi'_{X}(\operatorname{id}_{X})) = s_{i}$.
+    But naturality of $\psi'$ with respect to $f_{i}$ implies that
+    \[ \mathscr{F}(f_{i})(\psi'_{X}(\operatorname{id}_{X})) = \psi'_{X_{i}}(f_{i}) = s_{i}. \]
+    This shows that $\psi = \psi'$, so $\psi \colon X \to \mathscr{F}$ is the only natural transformation such that $\psi \circ i = \varphi$.
   \end{proof}
 \end{cor}
 
