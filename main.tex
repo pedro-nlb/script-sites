@@ -111,7 +111,7 @@ This determines the category up to isomorphism of categories, so we will sometim
 \end{cav}
 
 Here is a list with some categories that we might use:
-\begin{itemize}
+\begin{enumerate}
   \item The category $\mathbf{Set}$ of sets.
   \item The category $\mathbf{Set}_{*}$ of pointed sets.
   \item The category $\mathbf{Cat}$ of categories and functors.
@@ -127,7 +127,7 @@ Here is a list with some categories that we might use:
   \item If $\mathbf{C}$ is a category, then $\mathbf{C}^{\mathrm{op}}$ denotes its opposite category.
   \item If $\mathbf{C}$ is a category, then $\mathbf{PSh}(\mathbf{C}):= \mathbf{Fun}(\mathbf{C}^{\mathrm{op}},\mathbf{Set})$ is the category of presheaves on $\mathbf{C}$.
   \item If $X$ is a topological space, then $\mathbf{Op}(X)$ denotes the category corresponding to the partially ordered set of open subsets of $X$ and $\mathbf{PSh}(X) := \mathbf{PSh}(\mathbf{Op}(X))$ denotes the corresponding category of presheaves.
-\end{itemize}
+\end{enumerate}
 
 \section{Recollections from previous talks}
 
@@ -136,7 +136,7 @@ Here is a list with some categories that we might use:
 The limit construction takes as input a bunch of objects and morphisms between them in some category $\mathbf{C}$ and gives as an output a new object together with compatible morphisms to each of the previous objects having a nice universal property, which we can think of as this object being the largest possible object with such properties.
 We need to make a few things precise here:
 
-\begin{itemize}
+\begin{enumerate}
   \item Let us start by making the sentence ``a bunch of objects and morphisms between them in some category $\mathbf{C}$'' precise.
     We want to consider something like
     \begin{center}
@@ -186,7 +186,7 @@ We need to make a few things precise here:
     
     So the output of the limit construction is a cone over the input diagram, i.e., a new diagram which we can picture as a cone having the old diagram as a base.
   \item Finally, let us make the sentence ``the largest possible object with such properties'' precise.
-    This is arguably the most imprecise sentence in our initial description and yet the most important part of the concept of limit, so it would be a good time to say last but not least.
+    This is arguably the most imprecise sentence in our initial description and yet the most important part of the concept of limit.
     Cones over $F$ form a category, namely, the subcategory of the category of functors $\mathbf{Fun}(C(\mathbf{I}),\mathbf{C})$ whose objects are functors that restrict to $F$ over $\mathbf{I} \subseteq C(\mathbf{I})$ and whose morphisms are the natural transformations that restrict to the identity on $F$, meaning that the component at each object of $\mathbf{I} \subseteq C(\mathbf{I})$ is the identity on the image of the corresponding object under $F$.
     We can picture this by drawing the common base of the two cones as a single base, as shown in the following picture:
     \begin{center}
@@ -204,8 +204,8 @@ We need to make a few things precise here:
     On the one hand, we can think of a partially ordered set as a category having the same set of objects, in which there is a morphism $x \to y$ if and only if $x \leq y$.
     If this poset has a largest element, then this element is a terminal object in the corresponding category.
     More generally, the categorical product (which is a particular case of limit) of a subset of this poset, if it exists, corresponds to the infimum of this subset, which is the largest lower bound of all the elements in the subset.
-    On the other hand, one can intuitively think of limits as subobjects and colimits as quotient object, because this is indeed a possible way to construct limits and colimits in many familiar categories, e.g., in the category of sets, in which the limit can be constructed as a suitable subset of the product of all sets in the diagram.
-\end{itemize}
+    On the other hand, one can intuitively think of limits as subobjects and colimits as quotient objects, because this is indeed a possible way to construct limits and colimits in many familiar categories, e.g., in the category of sets, in which the limit can be constructed as a suitable subset of the product of all sets in the diagram.
+\end{enumerate}
 
 \begin{rem}
   Let $\mathbf{C}$ be a category in which all limits exist, meaning that for all $\mathbf{I}$ and all $F \colon \mathbf{I} \to \mathbf{C}$ the limit $\lim(F)$ exists.
